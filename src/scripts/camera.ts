@@ -47,7 +47,9 @@ export function initCamera() {
       .to(doors.l, { x: -240, duration: 0.25, ease: 'power2.inOut' }, 0.22)
       .to(doors.r, { x: 240, duration: 0.25, ease: 'power2.inOut' }, 0.22)
       .to(cam, { scale: desktop ? 5.2 : 6.5, duration: 0.4, ease: 'power2.in' }, 0.35)
+      .set(document.querySelector('[data-walk-in]'), { pointerEvents: 'none' }, 0.12)
       .to(hello, { opacity: 1, duration: 0.14 }, 0.66)
+      .set(hello, { pointerEvents: 'auto' }, 0.7)
       .from(hello.children, { y: 30, opacity: 0, stagger: 0.04, duration: 0.14 }, 0.68)
       .to({}, { duration: 0.18 });
 
@@ -90,8 +92,8 @@ export function initCamera() {
     if (roomST && track.contains(el)) {
       const dist = track.scrollWidth - window.innerWidth;
       scrollTo(roomST.start + (el.offsetLeft / dist) * (roomST.end - roomST.start));
-    } else if (id === 'room' && outsideST) {
-      scrollTo(outsideST.end + 1);
+    } else if (id === 'room' && roomST) {
+      scrollTo(roomST.start + 1);
     } else {
       scrollTo(el.getBoundingClientRect().top + window.scrollY);
     }

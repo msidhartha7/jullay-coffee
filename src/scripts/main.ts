@@ -20,6 +20,7 @@ const { companion } = initMugs(() => {});
 
 // walk in: the door, and the skip link
 document.querySelector('[data-walk-in]')?.addEventListener('click', () => camera.goTo('room'));
+document.querySelector('[data-come-in]')?.addEventListener('click', (e) => { e.preventDefault(); camera.goTo('mugs'); });
 document.querySelector('.skip')?.addEventListener('click', (e) => { e.preventDefault(); camera.goTo('mugs'); });
 companion?.addEventListener('click', () => camera.goTo('mugs'));
 

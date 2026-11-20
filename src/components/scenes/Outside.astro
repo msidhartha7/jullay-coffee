@@ -16,7 +16,7 @@ import { cafe } from '../../data/cafe';
     <div class="hello" data-hello>
       <p class="hello-word">{cafe.greeting.word}</p>
       <p class="t-tagline hello-meaning">{cafe.greeting.meaning}</p>
-      <p class="t-eyebrow hello-hint" aria-hidden="true">Come in</p>
+      <a class="hello-hint" href="#mugs" data-come-in>Come in <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
@@ -46,7 +46,14 @@ import { cafe } from '../../data/cafe';
   }
   .hello-word { font: 800 clamp(88px, 18vw, 220px) / 0.9 var(--font-display); letter-spacing: -0.03em; color: var(--jullay-milk); }
   .hello-meaning { max-width: 28ch; margin: 0 auto; }
-  .hello-hint { color: var(--jullay-cream); margin-top: var(--space-3); }
+  .hello-hint {
+    justify-self: center; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; margin-top: var(--space-3);
+    font: 600 13px / 1 var(--font-sans); letter-spacing: 0.32em; text-transform: uppercase; text-decoration: none;
+    color: var(--jullay-forest); background: var(--jullay-cream);
+  }
+  .hello-hint span { letter-spacing: 0; font-size: 18px; transition: transform .25s; }
+  .hello-hint:hover span { transform: translateX(4px); }
+  .hello-hint:focus-visible { outline: 2px solid var(--jullay-milk); outline-offset: 3px; }
 
   :global(html.js) .hello { position: absolute; inset: 0; opacity: 0; pointer-events: none; min-height: 0; }
 </style>
