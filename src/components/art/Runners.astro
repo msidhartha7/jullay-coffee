@@ -75,7 +75,7 @@ const him = runner('runner--him', { top: '#3c4128', topHatch: true, shorts: '#e0
   .runners { position: absolute; left: 0; right: 0; bottom: calc(var(--floor) - 6px); height: 0; pointer-events: none; z-index: 2; overflow: visible; }
   .runners-pair {
     position: absolute; left: 0; bottom: 0; display: flex; align-items: flex-end; gap: 4px;
-    animation: runners-cross 16s linear infinite; will-change: transform; contain: layout paint;
+    animation: runners-cross 16s linear infinite; will-change: transform;
   }
   .runners :global(.runner) { display: block; height: 96px; width: auto; overflow: visible; }
   .runners :global(.runner--her) { transform: translateX(40px); }
