@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import NotebookPages from '../components/scenes/NotebookPages.astro';
+import Credits from '../components/Credits.astro';
 import { cafe, span } from '../data/cafe';
 
 const ld = {
@@ -52,6 +53,7 @@ const ld = {
       <p class="t-body"><a href={cafe.mapUrl} target="_blank" rel="noopener">Open in maps</a> · <a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
     </section>
   </main>
+  <Credits tone="light" />
 </Base>
 
 <script>

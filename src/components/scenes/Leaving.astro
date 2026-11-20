@@ -1,6 +1,7 @@
 ---
 import Shopfront from '../art/Shopfront.astro';
 import { cafe, span } from '../../data/cafe';
+import Credits from '../Credits.astro';
 ---
 <footer class="leaving" data-theme="forest">
   <div class="dusk"><Shopfront id="shopfront-dusk" variant="dusk" /></div>
@@ -38,6 +39,7 @@ import { cafe, span } from '../../data/cafe';
       <p class="t-overline">{cafe.tagline}</p>
     </div>
   </div>
+  <Credits />
 </footer>
 
 <style>

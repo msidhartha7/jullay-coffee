@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Credits from '../components/Credits.astro';
 import MedalRail from '../components/wall/MedalRail.astro';
 import BibString from '../components/wall/BibString.astro';
 import { cafe } from '../data/cafe';
@@ -70,6 +71,7 @@ const ultras = medals.filter((m) => m.kind === 'ultra').length;
   <footer class="w-foot">
     <p class="t-small">{cafe.address.slice(1).join(', ')}.</p>
     <p class="t-small"><a href="/">Walk in</a> · <a href="/menu">Menu</a> · <a href="/library">Library</a> · <a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
+    <Credits />
   </footer>
 
   <script type="application/json" id="wall-data" set:html={JSON.stringify(medals.map(({ id, race, km, distance, when, where, note, kind }) => ({ id, race, km, distance, when, where, note, kind })))} />

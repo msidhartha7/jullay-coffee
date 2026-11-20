@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Credits from '../components/Credits.astro';
 import { cafe, span } from '../data/cafe';
 import { books, shelves, spineStyle } from '../data/library';
 
@@ -81,6 +82,7 @@ const id = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(
   <footer class="l-foot">
     <p class="t-small">{cafe.address.slice(1).join(', ')}. {cafe.hours.map((h) => `${h.days}, ${span(h)}`)}.</p>
     <p class="t-small"><a href="/">Walk in</a> · <a href="/menu">Menu</a> · <a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
+    <Credits />
   </footer>
 
   <dialog class="l-book" aria-labelledby="lb-title" data-dialog>

@@ -1,0 +1,18 @@
+---
+// Site credit, at the very bottom of every page.
+interface Props { tone?: 'dark' | 'light' }
+const { tone = 'dark' } = Astro.props;
+---
+<p class={`credits credits--${tone}`}>
+  Powered by caffeine, handcrafted by <a href="https://www.linkedin.com/in/mallicksidhartha7" target="_blank" rel="noopener">Sid</a>.
+</p>
+
+<style>
+  .credits { font: 400 13px / 20px var(--font-sans); letter-spacing: 0.02em; text-align: center; padding: var(--space-2) var(--space-2) var(--space-3); margin: 0; }
+  .credits a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .credits--dark { color: var(--jullay-cream); }
+  .credits--dark a { color: var(--jullay-milk); }
+  .credits--dark a:focus-visible { outline-color: var(--jullay-milk); }
+  .credits--light { color: var(--text-muted); }
+  .credits--light a { color: var(--text); }
+</style>
