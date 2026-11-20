@@ -163,4 +163,4 @@ export function mugSVG(m: Mug, o: MugOpts = {}): string {
 </svg>`;
 }
 
-export const LIQUID = { espresso: INK, milky: C.stone, water: '#2a2519', cold: '#3a2f22' };
+export const LIQUID = { espresso: INK, milky: C.stone, water: '#2a2519', cold: '#3a2f22', mocha: '#7a5e44', condensed: C.cream, vietnamese: '#8a6a4c' };

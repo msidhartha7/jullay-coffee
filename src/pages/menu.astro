@@ -1,64 +1,71 @@
 ---
 import Base from '../layouts/Base.astro';
-import { cafe, rupees } from '../data/cafe';
+import NotebookPages from '../components/scenes/NotebookPages.astro';
+import { cafe } from '../data/cafe';
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'CafeOrCoffeeShop',
+  name: cafe.name,
+  url: 'https://jullay.coffee',
+  servesCuisine: 'Coffee',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${cafe.address[1]}, ${cafe.address[2]}`,
+    addressLocality: 'Bengaluru', addressRegion: 'Karnataka', postalCode: '560102', addressCountry: 'IN',
+  },
+  hasMap: cafe.mapUrl,
+  sameAs: [cafe.instagram.url],
+  openingHoursSpecification: cafe.hours.map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: h.dow.map((d) => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][d]),
+    opens: h.open, closes: h.close,
+  })),
+  hasMenu: {
+    '@type': 'Menu',
+    name: 'Coffee',
+    hasMenuSection: cafe.menu.coffee.map((s) => ({
+      '@type': 'MenuSection',
+      name: s.title,
+      hasMenuItem: s.items.map((d) => ({
+        '@type': 'MenuItem', name: d.name, description: d.note,
+        offers: { '@type': 'Offer', price: d.price, priceCurrency: 'INR' },
+      })),
+    })),
+  },
+};
 ---
-<Base title={`Menu. ${cafe.name}`} description="Coffee, food and hours at Jullay Coffee. No hype. Just coffee.">
+<Base title={`Menu. ${cafe.name}`} description="Coffee at Jullay, HSR Layout, Bengaluru. Espresso bar and slow coffee, hot or iced. No hype. Just coffee.">
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
   <header class="m-head">
     <a href="/" class="m-logo" aria-label="Jullay Coffee, home"><span class="logo" aria-hidden="true"></span></a>
     <a href="/" class="m-back">Walk in instead</a>
   </header>
   <main class="m-main">
-    <h1 class="t-display">The menu.</h1>
-    <p class="t-tagline m-tag">{cafe.tagline}</p>
-
-    <section aria-labelledby="m-coffee">
-      <h2 id="m-coffee" class="t-eyebrow">Caffeine</h2>
-      <ul role="list">
-        {cafe.drinks.map((d) => (
-          <li>
-            <div class="m-row"><span class="t-title">{d.name}</span><span class="t-title">{rupees(d.price)}</span></div>
-            <p class="t-small m-note">{d.note} {d.tags?.map((t) => <span class="tag">{t}</span>)}</p>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <section aria-labelledby="m-food">
-      <h2 id="m-food" class="t-eyebrow">Carbs</h2>
-      <ul role="list">
-        {cafe.food.map((f) => (
-          <li>
-            <div class="m-row"><span class="t-title">{f.name}</span><span class="t-title">{rupees(f.price)}</span></div>
-            <p class="t-small m-note">{f.note}</p>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <section aria-labelledby="m-visit" class="m-visit">
-      <h2 id="m-visit" class="t-eyebrow">Visit</h2>
-      <div>
-        <address class="t-body">{cafe.address.map((l) => <span>{l}<br /></span>)}</address>
-        <ul role="list" class="t-body">{cafe.hours.map((h) => <li>{h.days}: {h.open} to {h.close}</li>)}</ul>
-        <p class="t-body"><a href={cafe.instagram.url}>{cafe.instagram.handle}</a></p>
-      </div>
+    <h1 class="sr-only">The Jullay menu</h1>
+    <NotebookPages idPrefix="m" headingLevel={2} />
+    <section class="m-visit" aria-labelledby="m-visit-h">
+      <h2 id="m-visit-h" class="t-eyebrow">Visit</h2>
+      <address class="t-body">{cafe.address.map((l) => <span>{l}<br /></span>)}</address>
+      <p class="t-small">{cafe.addressNote}</p>
+      <p class="t-body">{cafe.hours.map((h) => `${h.days}, ${h.open} to ${h.close} (${cafe.hoursNote.toLowerCase()}).`)} {cafe.food.tuesday}</p>
+      <p class="t-body"><a href={cafe.mapUrl} target="_blank" rel="noopener">Open in maps</a> · <a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
     </section>
   </main>
 </Base>
+
+<script>
+  if (new URLSearchParams(location.search).has('drafts')) document.documentElement.classList.add('show-drafts');
+</script>
 
 <style>
   .m-head { display: flex; justify-content: space-between; align-items: center; padding: var(--space-2) var(--space-3); background: var(--brand); color: var(--on-brand); }
   .m-logo { width: 96px; color: var(--jullay-milk); }
   .m-back { color: var(--jullay-milk); font-weight: 600; }
   .m-head :focus-visible { outline-color: var(--jullay-milk); }
-  .m-main { max-width: 680px; margin: 0 auto; padding: var(--space-4) var(--space-3); display: grid; gap: var(--space-4); }
-  .m-tag { color: var(--text-muted); margin-top: calc(-1 * var(--space-3)); }
-  section { display: grid; gap: var(--space-2); }
-  section h2 { color: var(--text-muted); border-bottom: 2px solid var(--text); padding-bottom: var(--space-1); }
-  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
-  .m-row { display: flex; justify-content: space-between; gap: var(--space-2); }
-  .m-note { color: var(--text-muted); display: flex; gap: var(--space-1); align-items: center; flex-wrap: wrap; }
-  address { font-style: normal; margin-bottom: var(--space-2); }
-  .m-visit ul { gap: 0; margin-bottom: var(--space-2); }
-  @media print { .m-head { background: none; color: var(--jullay-ink); } .m-logo, .m-back { color: var(--jullay-ink); } }
+  .m-main { max-width: 760px; margin: 0 auto; padding: var(--space-4) var(--space-2); display: grid; gap: var(--space-3); }
+  .m-visit { display: grid; gap: var(--space-1); padding: var(--space-3) 0; border-top: 2px solid var(--text); }
+  .m-visit h2 { color: var(--text-muted); }
+  address { font-style: normal; }
+  @media print { .m-head { background: none; } .m-logo, .m-back { color: var(--jullay-ink); } }
 </style>

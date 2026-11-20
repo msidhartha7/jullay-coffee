@@ -12,19 +12,35 @@ const cupsOnTop = [0, 1, 2, 3, 4, 5, 6];
   <div class="panel-body bar-body">
     <div class="chalkboard">
       <p class="t-eyebrow chalk-eyebrow">At the bar</p>
-      <h2 id="bar-h" class="t-display chalk-h">Today's pour.</h2>
-      <ul class="drinks" role="list">
-        {cafe.drinks.map((d) => (
-          <li>
-            <button type="button" class="drink" data-drink={d.id} aria-describedby="ticket">
-              <span class="drink-name">{d.name}</span>
-              <span class="drink-dots" aria-hidden="true"></span>
-              <span class="drink-price">{rupees(d.price)}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
-      <p class="chalk-foot t-small">{cafe.houseRules.join(' ')}</p>
+      <div class="chalk-top">
+        <h2 id="bar-h" class="t-display chalk-h">Today's pour.</h2>
+        <div class="temp" role="radiogroup" aria-label="Hot or iced">
+          <button type="button" role="radio" aria-checked="true" data-temp="hot">Hot</button>
+          <button type="button" role="radio" aria-checked="false" data-temp="iced" tabindex="-1">Iced</button>
+        </div>
+      </div>
+      {cafe.menu.coffee.map((s) => (
+        <div class="chalk-section">
+          <h3 class="t-eyebrow chalk-sub">{s.title}</h3>
+          <ul class="drinks" role="list">
+            {s.items.map((d) => (
+              <li>
+                <button type="button" class="drink" data-drink={d.id} data-hot={String(d.hot)} data-iced={String(d.iced)} aria-describedby="ticket">
+                  <span class="drink-name">{d.name}</span>
+                  <span class="drink-only t-small" aria-hidden="true">{!d.iced ? 'Hot only' : !d.hot ? 'Iced only' : ''}</span>
+                  <span class="drink-dots" aria-hidden="true"></span>
+                  <span class="drink-price">{rupees(d.price)}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <p class="t-small chalk-food" data-food-line>{cafe.food.line}</p>
+      <div class="chalk-foot">
+        <p class="t-small">{cafe.houseRules.join(' ')}</p>
+        <button type="button" class="chalk-link t-small" data-open-menu>The whole menu</button>
+      </div>
     </div>
 
     <div class="counter">
@@ -122,9 +138,9 @@ const cupsOnTop = [0, 1, 2, 3, 4, 5, 6];
       <div class="ticket" id="ticket" aria-live="polite" data-ticket>
         <p class="t-eyebrow ticket-eyebrow">Your order</p>
         <p class="t-title" data-ticket-name>Pick something from the board.</p>
-        <p class="t-small" data-ticket-note>We pour it into your mug.</p>
+        <p class="t-small" data-ticket-note>Choose hot or iced, then a drink. We pour it into your mug.</p>
         <p class="ticket-row">
-          <span class="t-small" data-ticket-mug>In the camp mug.</span>
+          <span class="t-small"><span data-ticket-temp></span><span data-ticket-mug>In the camp mug.</span></span>
           <span class="t-title" data-ticket-price></span>
         </p>
         <p class="ticket-tags" data-ticket-tags></p>
@@ -139,16 +155,31 @@ const cupsOnTop = [0, 1, 2, 3, 4, 5, 6];
   .chalkboard {
     background: var(--jullay-forest); color: var(--jullay-cream);
     border: 12px solid var(--jullay-stone); outline: 1.5px solid var(--jullay-ink); outline-offset: 0;
-    padding: var(--space-3); display: grid; gap: var(--space-2);
+    padding: var(--space-2) var(--space-3); display: grid; gap: 10px;
     box-shadow: inset 0 0 0 1.5px var(--jullay-ink);
   }
   .chalk-eyebrow, .chalk-foot { color: var(--jullay-cream); }
   .chalk-h { color: var(--jullay-milk); }
+  .chalk-top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+  .chalk-section { display: grid; gap: 2px; }
+  .chalk-sub { color: var(--jullay-cream); opacity: .85; padding-top: 4px; }
+  .chalk-food { color: var(--jullay-cream); border-top: 1.5px dashed var(--jullay-cream); padding-top: 8px; }
+  .chalk-foot { display: flex; justify-content: space-between; gap: var(--space-2); align-items: center; }
+  .chalk-link { color: var(--jullay-milk); text-decoration: underline; text-underline-offset: 3px; min-height: 32px; }
+  .temp { display: inline-flex; border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1.5px var(--jullay-cream); padding: 3px; }
+  .temp button { min-width: 64px; min-height: 36px; padding: 0 14px; border-radius: var(--radius-pill); font: 600 14px / 1 var(--font-sans); color: var(--jullay-cream); }
+  .temp button[aria-checked="true"] { background: var(--jullay-cream); color: var(--jullay-forest); }
+  .temp button:focus-visible { outline-color: var(--jullay-milk); }
   .drinks { list-style: none; margin: 0; padding: 0; display: grid; }
   .drink {
     width: 100%; display: flex; align-items: baseline; gap: var(--space-1); text-align: left;
-    padding: 7px 0; font: 300 clamp(17px, 2.2svh, 21px) / 1.2 var(--font-sans); letter-spacing: 0.02em; color: var(--jullay-cream);
+    padding: 4px 0; font: 300 clamp(16px, 2.1svh, 20px) / 1.2 var(--font-sans); letter-spacing: 0.02em; color: var(--jullay-cream);
   }
+  .drink-only { opacity: 0; font-size: 12px; letter-spacing: 0.04em; transition: opacity .2s; }
+  .drink[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+  .drink[aria-disabled="true"] .drink-only { opacity: 1; }
+  .drink-note[data-draft] { outline: none; }
+  :global(html.show-drafts) [data-draft] { outline: 2px dashed var(--jullay-chili); outline-offset: 2px; }
   .drink-dots { flex: 1; border-bottom: 1.5px dotted var(--jullay-cream); opacity: .6; transform: translateY(-4px); }
   .drink:hover .drink-name, .drink[aria-pressed="true"] .drink-name { font-weight: 600; color: var(--jullay-milk); }
   .drink[aria-pressed="true"] .drink-name::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 8px; background: var(--jullay-cream); border-radius: var(--radius-pill); }

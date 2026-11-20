@@ -1,0 +1,51 @@
+---
+import NotebookPages from './NotebookPages.astro';
+---
+<dialog class="menubook" data-menubook aria-labelledby="menubook-h">
+  <div class="mb-bar">
+    <h2 id="menubook-h" class="t-eyebrow">The menu</h2>
+    <nav class="mb-tabs" aria-label="Menu pages" data-mb-tabs></nav>
+    <button type="button" class="mb-close" data-mb-close>Close</button>
+  </div>
+  <div class="mb-pages" data-mb-pages>
+    <NotebookPages idPrefix="mb" headingLevel={3} />
+  </div>
+  <div class="mb-foot">
+    <button type="button" class="btn btn--ghost" data-mb-prev>Previous</button>
+    <p class="t-small" aria-live="polite" data-mb-count>1 of 4</p>
+    <button type="button" class="btn" data-mb-next>Next page</button>
+  </div>
+</dialog>
+
+<style>
+  .menubook {
+    width: min(760px, calc(100vw - 32px)); max-height: calc(100svh - 32px); padding: 0; border: 0;
+    background: var(--jullay-forest); color: var(--jullay-cream); overflow: hidden;
+  }
+  .menubook[open] { display: grid; grid-template-rows: auto 1fr auto; }
+  .menubook::backdrop { background: rgba(28, 26, 20, 0.72); }
+  .mb-bar { display: flex; align-items: center; gap: var(--space-2); padding: 10px var(--space-2); flex-wrap: wrap; }
+  .mb-bar h2 { color: var(--jullay-cream); }
+  .mb-tabs { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }
+  .mb-tabs :global(button) {
+    min-height: 32px; padding: 0 12px; border-radius: var(--radius-pill);
+    font: 600 13px / 1 var(--font-sans); color: var(--jullay-cream); box-shadow: inset 0 0 0 1px var(--jullay-moss);
+  }
+  .mb-tabs :global(button[aria-current="true"]) { background: var(--jullay-cream); color: var(--jullay-forest); }
+  .mb-close { color: var(--jullay-milk); font-weight: 600; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+  .mb-pages { overflow-y: auto; padding: 0 var(--space-2); overscroll-behavior: contain; }
+  .mb-pages :global(.nb-page) { display: none; min-height: 100%; }
+  .mb-pages :global(.nb-page.is-current) { display: grid; }
+  .mb-pages :global(.nb-page.is-turning) { animation: mb-turn .4s ease; }
+  @keyframes mb-turn { from { opacity: 0; transform: translateX(var(--from, 16px)); } to { opacity: 1; transform: none; } }
+  .mb-foot { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); padding: var(--space-2); }
+  .mb-foot .btn:not(.btn--ghost) { background: var(--jullay-cream); color: var(--jullay-forest); }
+  .mb-foot .btn--ghost { color: var(--jullay-cream); }
+  .mb-foot .btn[disabled] { opacity: .4; cursor: default; }
+  .menubook :focus-visible { outline-color: var(--jullay-milk); }
+  .menubook :global(.nb-page :focus-visible) { outline-color: var(--jullay-chili); }
+  @media (max-width: 600px) {
+    .menubook { width: 100vw; max-width: 100vw; height: 100svh; max-height: 100svh; margin: 0; }
+    .mb-tabs { order: 3; flex-basis: 100%; }
+  }
+</style>

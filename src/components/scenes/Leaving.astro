@@ -13,20 +13,21 @@ import { cafe } from '../../data/cafe';
       <div>
         <p class="t-eyebrow">Find us</p>
         <address class="t-body">{cafe.address.map((l) => <span>{l}<br /></span>)}</address>
+        <p class="t-small">{cafe.addressNote}</p>
         <a class="btn" href={cafe.mapUrl} target="_blank" rel="noopener">Open in maps</a>
       </div>
       <div>
-        <p class="t-eyebrow">Hours</p>
+        <p class="t-eyebrow">Hours ({cafe.hoursNote.toLowerCase()})</p>
         <ul class="t-body hours" role="list">
           {cafe.hours.map((h) => <li><span>{h.days}</span><span>{h.open} to {h.close}</span></li>)}
         </ul>
+        <p class="t-small">{cafe.food.tuesday}</p>
         <p class="t-small" data-open-line></p>
       </div>
       <div>
         <p class="t-eyebrow">Say jullay</p>
         <p class="t-body"><a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
-        <p class="t-body"><a href={`mailto:${cafe.email}`}>{cafe.email}</a></p>
-        <p class="t-body"><a href="/menu">The full menu</a></p>
+        <p class="t-body"><a href="/menu" data-open-menu="0">The full menu</a></p>
       </div>
     </div>
     <div class="lockup">

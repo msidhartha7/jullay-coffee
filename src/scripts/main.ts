@@ -3,12 +3,15 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { initMugs } from './mug';
 import { initPour } from './pour';
 import { initSound } from './sound';
-import { initBooks, initDaylight, initFood } from './ui';
+import { initBooks, initCloche, initDaylight } from './ui';
+import { initMenuBook } from './menubook';
 
+if (new URLSearchParams(location.search).has('drafts')) document.documentElement.classList.add('show-drafts');
 const camera = initCamera();
 initSound();
-initDaylight();
-initFood();
+const day = initDaylight();
+initCloche(day.drinksOnly);
+initMenuBook();
 initBooks();
 initPour();
 const { companion } = initMugs(() => {});

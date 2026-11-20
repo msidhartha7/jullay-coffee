@@ -1,12 +1,7 @@
 ---
-import { cafe } from '../../data/cafe';
+import { cafe, bookBody } from '../../data/cafe';
 
-const fill = (b: (typeof cafe.books)[number]) => {
-  if (b.id === 'hours') return cafe.hours.map((h) => `${h.days}: ${h.open} to ${h.close}.`);
-  if (b.id === 'find') return [...cafe.address.slice(1), cafe.instagram.handle];
-  return b.body;
-};
-const books = cafe.books.map((b) => ({ ...b, body: fill(b) }));
+const books = cafe.books.map((b) => ({ ...b, body: bookBody(b) }));
 const colours: Record<string, [string, string]> = {
   cream: ['#f8eacf', '#1c1a14'], oat: ['#e0cfbc', '#1c1a14'], olive: ['#6b7830', '#fefdfb'], moss: ['#576544', '#fefdfb'],
   forest: ['#3c4128', '#f8eacf'], ink: ['#1c1a14', '#f8eacf'], stone: ['#b49a7c', '#1c1a14'], milk: ['#fefdfb', '#1c1a14'],
@@ -42,12 +37,12 @@ const first = books[0];
         <p class="t-eyebrow page-eyebrow" data-book-spine>{first.spine}</p>
         <h3 class="t-headline" data-book-title>{first.title}</h3>
       </div>
-      <div class="page page-r" data-book-body>
+      <div class={`page page-r${first.list ? ' is-list' : ''}`} data-book-body>
         {first.body.map((p) => <p class="t-body">{p}</p>)}
       </div>
     </article>
   </div>
-  <script type="application/json" id="books-data" set:html={JSON.stringify(books.map(({ id, spine, title, body }) => ({ id, spine, title, body })))} />
+  <script type="application/json" id="books-data" set:html={JSON.stringify(books.map(({ id, spine, title, body, list }) => ({ id, spine, title, body, list: !!list })))} />
 </div>
 
 <style>
@@ -81,6 +76,8 @@ const first = books[0];
   .page-l { border-right: 1.5px solid var(--jullay-ink); align-content: space-between; }
   .page-eyebrow { color: var(--jullay-moss); }
   .page-r { gap: var(--space-1); }
+  .page-r.is-list { gap: 0; align-content: start; }
+  .page-r.is-list :global(p) { font-size: 14px; line-height: 20px; padding: 5px 0; border-bottom: 1px solid var(--jullay-oat); }
   .open-book.is-turning .page { animation: turn .45s ease; }
   @keyframes turn { 0% { opacity: 0; transform: translateX(10px); } 100% { opacity: 1; transform: none; } }
 

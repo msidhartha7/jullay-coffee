@@ -5,6 +5,7 @@ import Outside from '../components/scenes/Outside.astro';
 import Room from '../components/scenes/Room.astro';
 import WorksOut from '../components/scenes/WorksOut.astro';
 import Leaving from '../components/scenes/Leaving.astro';
+import MenuBook from '../components/scenes/MenuBook.astro';
 import { mugs, mugSVG } from '../lib/mugs';
 import { cafe } from '../data/cafe';
 ---
@@ -18,6 +19,7 @@ import { cafe } from '../data/cafe';
     <WorksOut />
   </main>
   <Leaving />
+  <MenuBook />
 
   <button type="button" class="companion" data-companion aria-label="Your mug: The camp mug. Go back to the mug wall.">
     <span class="companion-mug is-hot" data-companion-mug set:html={mugSVG(mugs[0], { uid: 'companion', steam: true })} />
