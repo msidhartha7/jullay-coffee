@@ -1,19 +1,20 @@
 ---
 // Shared engraving: hatch patterns used by every illustration on the page.
+// Diagonals are drawn into unrotated tiles (side = spacing x sqrt 2): patternTransform is slow to raster.
 ---
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
-    <pattern id="jh" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="4" stroke="#1c1a14" stroke-width=".9" />
+    <pattern id="jh" width="5.657" height="5.657" patternUnits="userSpaceOnUse">
+      <path d="M0 5.657 L5.657 0 M-1 1 L1 -1 M4.657 6.657 L6.657 4.657" stroke="#1c1a14" stroke-width=".9" />
     </pattern>
-    <pattern id="jh-fine" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="3" stroke="#1c1a14" stroke-width=".45" />
+    <pattern id="jh-fine" width="4.243" height="4.243" patternUnits="userSpaceOnUse">
+      <path d="M0 4.243 L4.243 0 M-1 1 L1 -1 M3.243 5.243 L5.243 3.243" stroke="#1c1a14" stroke-width=".45" />
     </pattern>
-    <pattern id="jh-x" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
-      <line x1="0" y1="0" x2="0" y2="4" stroke="#1c1a14" stroke-width=".9" />
+    <pattern id="jh-x" width="5.657" height="5.657" patternUnits="userSpaceOnUse">
+      <path d="M0 0 L5.657 5.657 M-1 4.657 L1 6.657 M4.657 -1 L6.657 1" stroke="#1c1a14" stroke-width=".9" />
     </pattern>
-    <pattern id="jh-dense" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="2.4" stroke="#1c1a14" stroke-width="1" />
+    <pattern id="jh-dense" width="3.394" height="3.394" patternUnits="userSpaceOnUse">
+      <path d="M0 3.394 L3.394 0 M-1 1 L1 -1 M2.394 4.394 L4.394 2.394" stroke="#1c1a14" stroke-width="1" />
     </pattern>
     <pattern id="jh-h" width="8" height="5" patternUnits="userSpaceOnUse">
       <line x1="0" y1="2.5" x2="8" y2="2.5" stroke="#1c1a14" stroke-width=".5" />
@@ -21,8 +22,8 @@
     <pattern id="jh-v" width="5" height="8" patternUnits="userSpaceOnUse">
       <line x1="2.5" y1="0" x2="2.5" y2="8" stroke="#1c1a14" stroke-width=".5" />
     </pattern>
-    <pattern id="jh-cream" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="6" stroke="#f8eacf" stroke-width=".7" />
+    <pattern id="jh-cream" width="8.485" height="8.485" patternUnits="userSpaceOnUse">
+      <path d="M0 8.485 L8.485 0 M-1 1 L1 -1 M7.485 9.485 L9.485 7.485" stroke="#f8eacf" stroke-width=".7" />
     </pattern>
     <!-- wood grain: wavy horizontal lines -->
     <pattern id="jh-wood" width="120" height="10" patternUnits="userSpaceOnUse">

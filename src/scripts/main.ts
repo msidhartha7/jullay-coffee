@@ -52,6 +52,10 @@ update();
 
 // The room pans with transforms; never let the browser scroll it sideways (anchor jumps do).
 const roomEl = document.getElementById('room');
+// pause the room's looping animations (steam) while it's off screen
+if (roomEl && 'IntersectionObserver' in window) {
+  new IntersectionObserver(([e]) => roomEl.classList.toggle('is-offscreen', !e.isIntersecting)).observe(roomEl);
+}
 roomEl?.addEventListener('scroll', () => { if (roomEl.scrollLeft) roomEl.scrollLeft = 0; });
 
 // #panel links (e.g. back from the library, or a shared link): walk there through the camera

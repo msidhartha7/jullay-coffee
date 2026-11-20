@@ -23,7 +23,7 @@ import { cafe } from '../../data/cafe';
 
 <style>
   .outside { position: relative; background: var(--jullay-forest); }
-  .outside-stage { position: relative; height: 100svh; overflow: hidden; }
+  .outside-stage { position: relative; height: 100svh; overflow: hidden; contain: paint; }
   .outside-cam { position: absolute; inset: 0; will-change: transform; transform-origin: 50% 65.5%; }
   .outside-overline {
     position: absolute; top: 84px; left: 0; right: 0; text-align: center; color: var(--jullay-ink);
@@ -37,12 +37,14 @@ import { cafe } from '../../data/cafe';
     position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: var(--jullay-ink);
     animation: nudge 2.4s ease-in-out infinite;
   }
+  /* faded out once you start walking in: stop animating it */
+  .outside-stage:global(.is-walking) .scroll-hint { animation-play-state: paused; }
   @keyframes nudge { 50% { transform: translateY(5px); } }
 
   .hello {
     display: grid; place-content: center; gap: var(--space-2); text-align: center;
     padding: var(--space-4) var(--space-3); background: var(--jullay-forest); color: var(--jullay-cream);
-    min-height: 60svh;
+    min-height: 60svh; contain: paint;
   }
   .hello-word { font: 800 clamp(88px, 18vw, 220px) / 0.9 var(--font-display); letter-spacing: -0.03em; color: var(--jullay-milk); }
   .hello-meaning { max-width: 28ch; margin: 0 auto; }

@@ -53,10 +53,17 @@ export function initCamera() {
       .from(hello.children, { y: 30, opacity: 0, stagger: 0.04, duration: 0.14 }, 0.68)
       .to({}, { duration: 0.18 });
 
+    // hello now covers the shopfront: stop compositing the fully zoomed SVG under it
+    tl.call(() => { cam.style.visibility = 'hidden'; stage.classList.add('is-through'); }, undefined, 0.82)
+      .call(() => { cam.style.visibility = ''; stage.classList.remove('is-through'); }, undefined, 0.81);
+
     outsideST = ScrollTrigger.create({
       trigger: stage, start: 'top top', end: () => `+=${window.innerHeight * 2.2}`,
-      pin: true, scrub: 0.6, animation: tl, invalidateOnRefresh: true,
+      pin: true, scrub: 0.25, animation: tl, invalidateOnRefresh: true,
       onRefresh: () => { cam.style.transformOrigin = doorOrigin(stage); },
+      // keep the zoom on the GPU only while it's actually zooming
+      onToggle: (self) => { cam.style.willChange = self.isActive ? 'transform' : 'auto'; },
+      onUpdate: (self) => { stage.classList.toggle('is-walking', self.progress > 0.12); },
     });
 
     // 2. Inside: pan across the room
@@ -65,18 +72,18 @@ export function initCamera() {
       const pan = gsap.to(track, { x: () => -distance(), ease: 'none' });
       roomST = ScrollTrigger.create({
         trigger: room, start: 'top top', end: () => `+=${distance()}`,
-        pin: true, scrub: 0.5, animation: pan, invalidateOnRefresh: true,
-        snap: { snapTo: 1 / (panels.length - 1), inertia: false, directional: false, duration: { min: 0.2, max: 0.6 }, delay: 0.2, ease: 'power1.inOut' },
+        pin: true, scrub: 0.2, animation: pan, invalidateOnRefresh: true,
+        snap: { snapTo: 1 / (panels.length - 1), inertia: false, directional: false, duration: { min: 0.15, max: 0.4 }, delay: 0.35, ease: 'power1.inOut' },
       });
     }
 
     // 3. The wall: words land one at a time
     gsap.from('[data-word]', {
       yPercent: 60, opacity: 0, stagger: 0.12, ease: 'power2.out',
-      scrollTrigger: { trigger: '.works', start: 'top 70%', end: 'center 55%', scrub: 0.6 },
+      scrollTrigger: { trigger: '.works', start: 'top 70%', end: 'center 55%', scrub: true },
     });
 
-    return () => { outsideST = null; roomST = null; };
+    return () => { outsideST = null; roomST = null; cam.style.visibility = ''; cam.style.willChange = ''; stage.classList.remove('is-through', 'is-walking'); };
   });
 
   /** Scroll to a panel by id, in whichever layout is live. */
@@ -87,7 +94,7 @@ export function initCamera() {
     const scrollTo = (y: number) => {
       const dist = Math.abs(window.scrollY - y);
       if (rm || instant) window.scrollTo(0, y);
-      else gsap.to(window, { scrollTo: { y, autoKill: false }, duration: Math.min(1.6, 0.5 + dist / 3000), ease: 'power2.inOut' });
+      else gsap.to(window, { scrollTo: { y, autoKill: false }, duration: Math.min(1.0, 0.4 + dist / 4000), ease: 'power2.inOut' });
     };
     if (roomST && track.contains(el)) {
       const dist = track.scrollWidth - window.innerWidth;

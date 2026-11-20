@@ -41,6 +41,8 @@ import { medals } from '../data/wall';
   }
   .companion.is-visible { opacity: 1; transform: none; pointer-events: auto; }
   .companion-mug { display: block; width: 100%; }
+  /* hidden companion: don't keep its steam running */
+  .companion:not(.is-visible) :global(.steam path) { animation-play-state: paused; }
   .companion-mug :global(svg) { width: 100%; height: auto; display: block; overflow: visible; }
   .companion :global(.steam path) { stroke: var(--jullay-ink); }
   .companion:focus-visible { outline-color: var(--jullay-ink); }
