@@ -1,0 +1,127 @@
+---
+// Two runners, a woman and a man, jogging across the cafe floor on a loop.
+// Engraved style: ink outlines, palette fills. Side view, running to the right.
+// viewBox 0 0 80 110: hip (40,58), knee (40,82), shoulder (44,32), feet at y≈107.
+const INK = '#1c1a14';
+type Look = { top: string; topHatch: boolean; shorts: string; skin: string; bib: string; hair: 'ponytail' | 'cap'; trim: string };
+
+function runner(cls: string, l: Look): string {
+  const s = `stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"`;
+  const leg = (side: 'front' | 'back') => {
+    const shade = side === 'back' ? `<path d="M36 58 L44 58 L43 82 L37 82 Z" fill="url(#jh)" opacity=".45"/>` : '';
+    return `<g class="leg leg-${side}"><g class="thigh">
+      <path d="M36 58 L44 58 L43 82 L37 82 Z" fill="${l.skin}" ${s}/>
+      <path d="M35 56 L45 56 L44.5 68 L35.5 68 Z" fill="${l.shorts}" ${s}/>
+      ${shade}
+      <g class="shin">
+        <path d="M37 81 L43 81 L42 102 L38 102 Z" fill="${l.skin}" ${s}/>
+        ${side === 'back' ? `<path d="M37 81 L43 81 L42 102 L38 102 Z" fill="url(#jh)" opacity=".45"/>` : ''}
+        <path d="M36.5 101 L48 101 Q51 104 48 107 L36.5 107 Z" fill="#fefdfb" ${s}/>
+        <path d="M36.5 105 H48.5" stroke="${INK}" stroke-width=".8"/>
+      </g>
+    </g></g>`;
+  };
+  const arm = (side: 'front' | 'back') => `<g class="arm arm-${side}">
+      <path d="M41.5 31 L47 31 L46 47 L42.5 47 Z" fill="${l.skin}" ${s}/>
+      <path d="M42.5 45 L46.5 49 L56 41 L53 38 Z" fill="${l.skin}" ${s}/>
+      <circle cx="55.5" cy="39.5" r="2.6" fill="${l.skin}" ${s}/>
+      ${side === 'back' ? `<path d="M41.5 31 L47 31 L46 47 L42.5 47 Z M42.5 45 L46.5 49 L56 41 L53 38 Z" fill="url(#jh)" opacity=".45"/>` : ''}
+    </g>`;
+  const hair = l.hair === 'ponytail'
+    ? `<path class="pony" d="M41 12 C34 10 28 14 24 22 C30 20 34 19 39 18 Z" fill="${INK}"/>
+       <path d="M39 16 C38 7 46 4 52 8 C55 10 56 13 55 15 C50 12 45 12 41 16 Z" fill="${INK}"/>`
+    : `<path d="M39 13 C39 5 47 3 53 6 C55 8 56 10 56 12 Z" fill="${l.top}" ${s}/>
+       <path d="M53 11 L62 12 L61 14 L54 13.5 Z" fill="${l.top}" ${s}/>`;
+  return `<svg class="runner ${cls}" viewBox="0 0 80 110" aria-hidden="true" focusable="false" overflow="visible">
+    ${arm('back')}
+    ${leg('back')}
+    <g class="body">
+      <path d="M36 28 Q46 24 52 30 L48.5 60 Q40 63 33.5 59 Z" fill="${l.top}" ${s}/>
+      ${l.topHatch ? `<path d="M36 28 Q46 24 52 30 L48.5 60 Q40 63 33.5 59 Z" fill="url(#jh-cream)" opacity=".5"/>` : `<path d="M34 34 L36 58 Q39 60 42 60 L41 30 Z" fill="url(#jh-fine)" opacity=".5"/>`}
+      <path d="M38 27 Q44 25 49 28" fill="none" stroke="${l.trim}" stroke-width="1.6"/>
+      <rect x="40.5" y="37" width="10" height="8" fill="#fefdfb" ${s} stroke-width="1"/>
+      <text x="45.5" y="43.3" text-anchor="middle" font-family="Outfit, sans-serif" font-weight="800" font-size="5.6" fill="${INK}">${l.bib}</text>
+      <path d="M44 26 L46 21 L50 21 L49 27 Z" fill="${l.skin}" ${s}/>
+      <circle cx="48" cy="15" r="8" fill="${l.skin}" ${s}/>
+      <path d="M55.6 15 l1.6 1.2 -1.4 .6" fill="none" stroke="${INK}" stroke-width="1"/>
+      ${hair}
+    </g>
+    ${leg('front')}
+    ${arm('front')}
+  </svg>`;
+}
+
+const her = runner('runner--her', { top: '#f8eacf', topHatch: false, shorts: '#576544', skin: '#b49a7c', bib: '21', hair: 'ponytail', trim: '#576544' });
+const him = runner('runner--him', { top: '#3c4128', topHatch: true, shorts: '#e0cfbc', skin: '#c9b08f', bib: '42', hair: 'cap', trim: '#f8eacf' });
+---
+<div class="runners" aria-hidden="true" data-runners>
+  <div class="runners-pair">
+    <Fragment set:html={him} />
+    <Fragment set:html={her} />
+  </div>
+</div>
+
+<script>
+  // Only run while the room is on screen.
+  const layer = document.querySelector<HTMLElement>('[data-runners]');
+  const room = document.getElementById('room');
+  if (layer && room && 'IntersectionObserver' in window) {
+    layer.classList.add('is-paused');
+    new IntersectionObserver(([e]) => layer.classList.toggle('is-paused', !e.isIntersecting), { threshold: 0.05 }).observe(room);
+  }
+</script>
+
+<style>
+  .runners { position: absolute; left: 0; right: 0; bottom: calc(var(--floor) - 6px); height: 0; pointer-events: none; z-index: 2; overflow: visible; }
+  .runners-pair {
+    position: absolute; left: 0; bottom: 0; display: flex; align-items: flex-end; gap: 4px;
+    animation: runners-cross 16s linear infinite; will-change: transform;
+  }
+  .runners :global(.runner) { display: block; height: 96px; width: auto; overflow: visible; }
+  .runners :global(.runner--her) { transform: translateX(40px); }
+
+  /* the run cycle */
+  .runners :global(.runner g) { transform-box: view-box; }
+  .runners :global(.thigh) { transform-origin: 40px 58px; animation: thigh var(--cadence) linear infinite; }
+  .runners :global(.leg-back .thigh) { animation-delay: calc(var(--cadence) / -2); }
+  .runners :global(.shin) { transform-origin: 40px 82px; animation: shin var(--cadence) linear infinite; }
+  .runners :global(.leg-back .shin) { animation-delay: calc(var(--cadence) / -2); }
+  .runners :global(.arm) { transform-origin: 44px 32px; animation: arm var(--cadence) linear infinite; }
+  .runners :global(.arm-back) { animation-delay: calc(var(--cadence) / -2); }
+  .runners :global(.runner) { animation: bob calc(var(--cadence) / 2) ease-in-out infinite; }
+  .runners :global(.runner--her) { --cadence: .62s; animation-name: bob-her; }
+  .runners :global(.runner--him) { --cadence: .68s; animation-delay: -.2s; }
+  .runners :global(.runner--him g) { animation-delay: -.2s; }
+  .runners :global(.runner--him .leg-back .thigh), .runners :global(.runner--him .leg-back .shin), .runners :global(.runner--him .arm-back) { animation-delay: calc(-.2s - var(--cadence) / 2); }
+  .runners :global(.pony) { transform-box: view-box; transform-origin: 41px 14px; animation: pony calc(var(--cadence) / 2) ease-in-out infinite; }
+
+  @keyframes runners-cross {
+    0% { transform: translateX(-20vw); }
+    80% { transform: translateX(110vw); }
+    100% { transform: translateX(110vw); }
+  }
+  @keyframes thigh { 0% { transform: rotate(-32deg); } 50% { transform: rotate(30deg); } 100% { transform: rotate(-32deg); } }
+  @keyframes shin { 0% { transform: rotate(8deg); } 30% { transform: rotate(22deg); } 55% { transform: rotate(78deg); } 80% { transform: rotate(46deg); } 100% { transform: rotate(8deg); } }
+  @keyframes arm { 0% { transform: rotate(38deg); } 50% { transform: rotate(-36deg); } 100% { transform: rotate(38deg); } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  @keyframes bob-her { 0%, 100% { transform: translateX(40px) translateY(0); } 50% { transform: translateX(40px) translateY(-3px); } }
+  @keyframes pony { 0%, 100% { transform: rotate(8deg); } 50% { transform: rotate(-12deg); } }
+
+  .runners.is-paused, .runners.is-paused :global(*) { animation-play-state: paused !important; }
+
+  @media (max-width: 860px) {
+    .runners :global(.runner) { height: 64px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .runners-pair { animation: none; left: 6%; }
+    .runners :global(*), .runners :global(.runner) { animation: none !important; }
+    .runners :global(.leg-front .thigh) { transform: rotate(-24deg); }
+    .runners :global(.leg-back .thigh) { transform: rotate(22deg); }
+    .runners :global(.leg-back .shin) { transform: rotate(50deg); }
+    .runners :global(.arm-front) { transform: rotate(-28deg); }
+    .runners :global(.arm-back) { transform: rotate(30deg); }
+  }
+  @media (prefers-reduced-motion: reduce) and (max-width: 860px) {
+    .runners-pair { left: 50%; transform: translateX(-50%); }
+  }
+</style>

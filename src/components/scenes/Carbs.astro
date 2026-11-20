@@ -58,7 +58,7 @@ import { cafe } from '../../data/cafe';
   .cloche-caption { background: var(--jullay-milk); color: var(--jullay-ink); padding: 4px 12px; outline: 1.5px solid var(--jullay-ink); }
 
   .counter-top {
-    position: absolute; left: 0; right: 0; bottom: 0; height: 22svh; z-index: 0;
+    position: absolute; left: 0; right: 0; bottom: var(--floor, 0px); height: 20svh; z-index: 0;
     background-color: var(--jullay-stone); border-top: 10px solid var(--jullay-ink);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='18'%3E%3Cpath d='M0 5 C40 2 80 8 120 5 S200 2 240 5' fill='none' stroke='%231c1a14' stroke-width='.8' opacity='.5'/%3E%3Cpath d='M0 13 C60 15 100 10 160 13 S220 15 240 13' fill='none' stroke='%231c1a14' stroke-width='.6' opacity='.4'/%3E%3C/svg%3E");
   }

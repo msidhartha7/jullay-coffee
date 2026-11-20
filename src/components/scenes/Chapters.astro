@@ -54,7 +54,7 @@ const first = books[0];
   .chapters-body { grid-template-columns: 1fr 1.1fr; align-items: center; }
   .shelf-wrap { display: grid; gap: var(--space-3); }
   .shelf {
-    height: min(44svh, 360px); display: flex; align-items: flex-end; gap: 3px;
+    height: min(38svh, 340px); display: flex; align-items: flex-end; gap: 3px;
     padding: 0 var(--space-2); border-left: 14px solid var(--jullay-stone); border-right: 14px solid var(--jullay-stone);
     outline: 1.5px solid var(--jullay-ink); background: var(--jullay-forest);
   }
@@ -73,7 +73,7 @@ const first = books[0];
   .bookend { width: 18px; height: 50%; background: var(--jullay-ink); margin-left: 6px; }
   .shelf-board { height: 14px; background: var(--jullay-stone); outline: 1.5px solid var(--jullay-ink); margin-top: calc(-1 * var(--space-3)); }
 
-  .to-library { justify-self: start; display: grid; gap: 6px; text-decoration: none; color: var(--jullay-milk); margin-top: calc(-1 * var(--space-1)); }
+  .to-library { justify-self: start; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; text-decoration: none; color: var(--jullay-milk); margin-top: calc(-1 * var(--space-1)); }
   .to-library-arrow {
     display: inline-flex; align-items: center; height: 54px; padding: 0 56px 0 18px;
     background-color: var(--jullay-stone);
@@ -100,7 +100,7 @@ const first = books[0];
 
   @media (max-width: 860px) {
     .shelf { height: 240px; overflow-x: auto; }
-    .to-library { justify-self: start; display: grid; gap: 6px; text-decoration: none; color: var(--jullay-milk); margin-top: calc(-1 * var(--space-1)); }
+    .to-library { justify-self: start; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; text-decoration: none; color: var(--jullay-milk); margin-top: calc(-1 * var(--space-1)); }
   .to-library-arrow {
     display: inline-flex; align-items: center; height: 54px; padding: 0 56px 0 18px;
     background-color: var(--jullay-stone);

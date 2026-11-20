@@ -4,6 +4,7 @@ import Bar from './Bar.astro';
 import Carbs from './Carbs.astro';
 import Chapters from './Chapters.astro';
 import Wall from './Wall.astro';
+import Runners from '../art/Runners.astro';
 ---
 <section id="room" class="room" aria-label="Inside the cafe" tabindex="-1">
   <div class="room-track" data-track>
@@ -13,6 +14,10 @@ import Wall from './Wall.astro';
     <Chapters />
     <Wall />
   </div>
+  <div class="room-floor-wrap" aria-hidden="true">
+    <div class="room-floor"></div>
+    <Runners />
+  </div>
   <div class="room-light" aria-hidden="true" data-light>
     <span></span><span></span><span></span>
   </div>
@@ -20,7 +25,7 @@ import Wall from './Wall.astro';
 
 <style>
   .room {
-    position: relative; color: var(--jullay-milk); overflow: hidden;
+    position: relative; color: var(--jullay-milk); overflow: hidden; overflow: clip; --floor: 64px;
     background-color: var(--jullay-olive);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 6 L6 0' stroke='%231c1a14' stroke-width='.35' opacity='.25'/%3E%3C/svg%3E");
   }
@@ -28,7 +33,7 @@ import Wall from './Wall.astro';
   .room-track { position: relative; z-index: 1; display: flex; flex-direction: column; }
 
   :global(.panel) {
-    position: relative; min-height: 100svh; padding: 96px var(--space-3) var(--space-4);
+    position: relative; min-height: 100svh; padding: 96px var(--space-3) calc(var(--floor, 64px) + var(--space-2));
     display: grid; grid-template-rows: auto 1fr; gap: var(--space-2);
   }
   :global(.panel-body) { display: grid; gap: var(--space-4); align-items: center; max-width: 1280px; width: 100%; margin: 0 auto; }
@@ -48,6 +53,13 @@ import Wall from './Wall.astro';
     font: 700 18px / 1 var(--font-display); letter-spacing: 0.16em; text-transform: uppercase;
   }
   :global(.panel-bar) { grid-template-rows: 1fr; }
+
+  /* the floor the runners use: sticks above the bottom edge while you're in the room */
+  .room-floor-wrap { position: sticky; bottom: 0; z-index: 2; height: var(--floor); pointer-events: none; }
+  .room-floor {
+    position: absolute; inset: 0; background-color: var(--jullay-stone); border-top: 1.5px solid var(--jullay-ink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='16'%3E%3Cpath d='M0 4 C40 2 80 7 120 4 S200 2 240 4' fill='none' stroke='%231c1a14' stroke-width='.8' opacity='.5'/%3E%3Cpath d='M0 12 C60 14 100 9 160 12 S220 14 240 12' fill='none' stroke='%231c1a14' stroke-width='.6' opacity='.4'/%3E%3Cpath d='M0 0 V16' stroke='%231c1a14' stroke-width='.6' opacity='.35'/%3E%3C/svg%3E");
+  }
 
   /* window light: flat bands of sun that move with the hour */
   .room-light {
@@ -69,14 +81,18 @@ import Wall from './Wall.astro';
     :global(html.js) .room { height: 100svh; }
     :global(html.js) .room-track { flex-direction: row; height: 100%; width: max-content; will-change: transform; }
     :global(html.js) .room-track > :global(.panel) { width: 100vw; height: 100svh; min-height: 0; flex: none; }
+    :global(html.js) .room-floor-wrap { position: absolute; left: 0; right: 0; bottom: 0; }
   }
   @media (max-width: 860px) {
+    .room { --floor: 34px; }
     :global(.panel) { padding: 84px var(--space-2) var(--space-4); }
+    .room-floor-wrap { bottom: 52px; }
     :global(.panel-body) { grid-template-columns: 1fr !important; gap: var(--space-3); }
   }
   @media (prefers-reduced-motion: reduce) {
     :global(html.js) .room { height: auto; }
     :global(html.js) .room-track { flex-direction: column; width: auto; }
     :global(html.js) .room-track > :global(.panel) { width: auto; height: auto; min-height: 100svh; }
+    :global(html.js) .room-floor-wrap { position: sticky; }
   }
 </style>
