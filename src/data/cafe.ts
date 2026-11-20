@@ -68,6 +68,65 @@ const coffee: MenuSection[] = [
   },
 ];
 
+export type FoodItem = { name: string; sub?: string; price: number; note?: string };
+export type FoodSection = { id: string; title: string; intro?: string; note?: string; groups: { title?: string; items: FoodItem[] }[] };
+
+/** The food pages of the official menu. Shown only in the whole menu (menu book and /menu). */
+const food: FoodSection[] = [
+  {
+    id: 'food', title: 'Food',
+    groups: [{ items: [
+      { name: 'Date banana toast', price: 200 },
+      { name: 'Basil pesto toast', price: 200 },
+      { name: 'Peanut butter toast', price: 200 },
+      { name: 'Egg Kezriwal', sub: 'Indian egg benedict', price: 200 },
+      { name: 'Cheese omelette', price: 200 },
+      { name: 'Pesto omelette', price: 220 },
+      { name: 'Chicken omelette', price: 270 },
+      { name: 'Paneer omelette', price: 270 },
+      { name: 'Chicken sauté', sub: 'Fried salad', price: 270 },
+      { name: 'Paneer sauté', price: 270 },
+      { name: 'Paneer rice bowl', price: 300 },
+      { name: 'Chicken rice bowl', price: 300 },
+      { name: 'Watermelon feta salad', price: 180 },
+      { name: 'Tofu sauté', price: 270 },
+      { name: 'Prawns sauté', sub: 'Weekend', price: 300 },
+      { name: 'Prawns omelette', sub: 'Weekend', price: 325 },
+    ] }],
+  },
+  {
+    id: 'sandwich', title: 'Sandwich',
+    note: 'Ask for no mayo. Spicy or non-spicy.',
+    groups: [{ items: [
+      { name: 'Nutella banana sandwich', price: 225 },
+      { name: 'Paneer sandwich', price: 250 },
+      { name: 'Cheesy corn sandwich', price: 250 },
+      { name: 'Tofu sandwich', price: 250 },
+      { name: 'Tempeh sandwich', sub: 'Fermented soy bean', price: 250 },
+      { name: 'Mushroom sandwich', price: 250 },
+      { name: 'Egg (omelette) sandwich', price: 220 },
+      { name: 'Chicken sandwich', price: 250 },
+    ] }],
+  },
+  {
+    id: 'bakery', title: 'Bakery & cookies',
+    intro: 'Small-batch bakes, simple flavours.',
+    groups: [
+      { title: 'Bakery', items: [
+        { name: 'Korean bun', price: 180 },
+        { name: 'Brownie with Nutella', sub: 'Contains egg', price: 150 },
+        { name: 'Brownie', sub: 'Veg', price: 150 },
+        { name: 'Lamington', price: 150, note: 'A classic Australian bake. Soft vanilla sponge, dipped in chocolate and rolled in desiccated coconut.' },
+      ] },
+      { title: 'Cookies', items: [
+        { name: 'Jeera twin', price: 80 },
+        { name: 'Choco cookies', price: 80 },
+        { name: 'Almond jaggery twin', price: 80 },
+      ] },
+    ],
+  },
+];
+
 export const cafe = {
   name: 'Jullay Coffee',
   tagline: 'No hype. Just coffee.',
@@ -99,7 +158,7 @@ export const cafe = {
   /** days with no kitchen: only beverages (0 = Sunday) */
   drinksOnlyDays: [2],
 
-  menu: { coffee },
+  menu: { coffee, food },
   get drinks(): Drink[] { return coffee.flatMap((s) => s.items); },
 
   food: {

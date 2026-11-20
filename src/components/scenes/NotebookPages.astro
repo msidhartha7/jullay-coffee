@@ -39,8 +39,35 @@ const hours = cafe.hours.map((h) => `${h.open} to ${h.close}`).join(', ');
       </tbody>
     </table>
   ))}
-  <p class="nb-food">{cafe.food.line} <span>{cafe.food.tuesday}</span></p>
+  <p class="nb-food">Food is on the next pages. <span>{cafe.food.tuesday}</span></p>
 </section>
+
+{cafe.menu.food.map((sec) => (
+  <section class="nb-page" data-nb-page data-title={sec.title} aria-labelledby={`${idPrefix}-${sec.id}`}>
+    <p class="nb-mark">Jullay</p>
+    <H id={`${idPrefix}-${sec.id}`} class="nb-h">{sec.title}</H>
+    {sec.intro && <p class="nb-sub">{sec.intro}</p>}
+    {sec.groups.map((g) => (
+      <table class="nb-table nb-table--food">
+        <caption class={g.title ? 'nb-caption' : 'sr-only'}>{g.title ?? sec.title}</caption>
+        <thead class="sr-only"><tr><th scope="col">Dish</th><th scope="col">Price</th></tr></thead>
+        <tbody>
+          {g.items.map((f) => (
+            <tr>
+              <th scope="row">
+                <span class="nb-item">{f.name}{f.sub && <span class="nb-paren"> ({f.sub})</span>}</span>
+                {f.note && <span class="nb-note">{f.note}</span>}
+              </th>
+              <td class="nb-price">{rupees(f.price)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ))}
+    {sec.note && <p class="nb-box">{sec.note}</p>}
+    {sec.id === 'food' && <p class="nb-food"><span>{cafe.food.tuesday} Good food takes a little time.</span></p>}
+  </section>
+))}
 
 <section class="nb-page" data-nb-page data-title="A few things to know" aria-labelledby={`${idPrefix}-know`}>
   <p class="nb-mark">Jullay</p>
@@ -97,6 +124,9 @@ const hours = cafe.hours.map((h) => `${h.open} to ${h.close}`).join(', ');
   .nb-note { display: block; font: 400 14px / 20px var(--font-sans); color: var(--jullay-moss); }
   .nb-price { font: 600 18px / 24px var(--font-display) !important; white-space: nowrap; }
   .nb-no { color: var(--jullay-moss); }
+  .nb-table--food tbody th { padding: 5px 4px 5px 0; }
+  .nb-paren { font: 400 15px / 24px var(--font-sans); color: var(--jullay-moss); }
+  .nb-box { justify-self: center; text-align: center; font: 300 20px / 28px var(--font-sans); padding: var(--space-1) var(--space-3); outline: 1.5px solid var(--jullay-ink); }
   .nb-food { font: 400 15px / 22px var(--font-sans); border-top: 1.5px dashed var(--jullay-ink); padding-top: var(--space-1); }
   .nb-food span { color: var(--jullay-moss); }
 
