@@ -153,8 +153,7 @@ export const cafe = {
 
   // From "A few things to know". 24h clock, in the cafe's time zone.
   timeZone: 'Asia/Kolkata',
-  hoursNote: 'This month',
-  hours: [{ days: 'Every day', open: '10:00', close: '19:00', dow: [0, 1, 2, 3, 4, 5, 6] }],
+  hours: [{ days: 'Every day', open: '07:30', close: '20:30', dow: [0, 1, 2, 3, 4, 5, 6] }],
   /** days with no kitchen: only beverages (0 = Sunday) */
   drinksOnlyDays: [2],
 
@@ -201,14 +200,21 @@ export const cafe = {
 };
 
 /** Opening hours as one line, e.g. "Every day: 10:00 to 19:00." */
-export const hoursLines = () => cafe.hours.map((h) => `${h.days}: ${h.open} to ${h.close}.`);
+/** '20:30' -> '8:30 pm' */
+export function clock(hm: string) {
+  const [h, m] = hm.split(':').map(Number);
+  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, '0')}` : ''} ${h < 12 ? 'am' : 'pm'}`;
+}
+/** e.g. '7:30 am to 8:30 pm' */
+export const span = (h: { open: string; close: string }) => `${clock(h.open)} to ${clock(h.close)}`;
+export const hoursLines = () => cafe.hours.map((h) => `${h.days}: ${span(h)}.`);
 
 /** Book bodies that come from other data. */
 export function bookBody(b: Book): string[] {
   switch (b.id) {
     case 'concept': return [cafe.concept.values.join(' · '), ...cafe.concept.lines];
     case 'name': return [cafe.greeting.meaning, 'One word for walking in. We named the place after it.'];
-    case 'know': return [`Timings (${cafe.hoursNote.toLowerCase()}): ${cafe.hours.map((h) => `${h.open} to ${h.close}`).join(', ')}.`, cafe.food.tuesday, ...cafe.thingsToKnow];
+    case 'know': return [`Timings: ${cafe.hours.map(span).join(', ')}.`, cafe.food.tuesday, ...cafe.thingsToKnow];
     case 'rules': return cafe.rules.map((r, i) => `${i + 1}. ${r}`);
     case 'find': return [...cafe.address.slice(1), cafe.addressNote, cafe.instagram.handle];
     default: return b.body;

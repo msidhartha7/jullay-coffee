@@ -1,4 +1,4 @@
-import { openState, cafe } from '../data/cafe';
+import { openState, cafe, clock, span } from '../data/cafe';
 
 /** Carbs: lift the glass. No menu under it, just a nudge to ask. */
 export function initCloche(drinksOnly: boolean) {
@@ -80,8 +80,8 @@ export function initDaylight() {
   document.querySelectorAll('[data-open-sign]').forEach((s) => { s.textContent = st.open ? 'Open' : 'Closed'; });
   const line = document.querySelector('[data-open-line]');
   if (line) line.textContent = st.open
-    ? `Open now, until ${st.today?.close}.`
-    : `Closed now. ${st.today ? `Today: ${st.today.open} to ${st.today.close}.` : ''}`.trim();
+    ? `Open now, until ${st.today ? clock(st.today.close) : ''}.`
+    : `Closed now. ${st.today ? `Today: ${span(st.today)}.` : ''}`.trim();
 
   const room = document.querySelector<HTMLElement>('#room');
   const light = document.querySelector<HTMLElement>('[data-light]');

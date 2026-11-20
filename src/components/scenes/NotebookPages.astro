@@ -1,10 +1,10 @@
 ---
 // The cafe's notebook menu, as lined pages. Used by the menu book (dialog) and /menu.
-import { cafe, rupees } from '../../data/cafe';
+import { cafe, rupees, span } from '../../data/cafe';
 interface Props { idPrefix?: string; headingLevel?: 2 | 3 }
 const { idPrefix = 'nb', headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}` as 'h2' | 'h3';
-const hours = cafe.hours.map((h) => `${h.open} to ${h.close}`).join(', ');
+const hours = cafe.hours.map(span).join(', ');
 ---
 <section class="nb-page" data-nb-page data-title="Our concept" aria-labelledby={`${idPrefix}-concept`}>
   <p class="nb-mark">Jullay</p>
@@ -73,7 +73,7 @@ const hours = cafe.hours.map((h) => `${h.open} to ${h.close}`).join(', ');
   <p class="nb-mark">Jullay</p>
   <H id={`${idPrefix}-know`} class="nb-h">A few things to know</H>
   <ul class="nb-list" role="list">
-    <li><strong>Timings ({cafe.hoursNote.toLowerCase()})</strong>{hours}</li>
+    <li><strong>Timings</strong>{hours}</li>
     <li><strong>Tuesdays</strong>Only beverages.</li>
     {cafe.thingsToKnow.slice(0, -1).map((t) => <li>{t}</li>)}
   </ul>

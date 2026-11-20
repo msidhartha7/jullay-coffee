@@ -1,6 +1,6 @@
 ---
 import Shopfront from '../art/Shopfront.astro';
-import { cafe } from '../../data/cafe';
+import { cafe, span } from '../../data/cafe';
 ---
 <footer class="leaving" data-theme="forest">
   <div class="dusk"><Shopfront id="shopfront-dusk" variant="dusk" /></div>
@@ -17,9 +17,9 @@ import { cafe } from '../../data/cafe';
         <a class="btn" href={cafe.mapUrl} target="_blank" rel="noopener">Open in maps</a>
       </div>
       <div>
-        <p class="t-eyebrow">Hours ({cafe.hoursNote.toLowerCase()})</p>
+        <p class="t-eyebrow">Hours</p>
         <ul class="t-body hours" role="list">
-          {cafe.hours.map((h) => <li><span>{h.days}</span><span>{h.open} to {h.close}</span></li>)}
+          {cafe.hours.map((h) => <li><span>{h.days}</span><span>{span(h)}</span></li>)}
         </ul>
         <p class="t-small">{cafe.food.tuesday}</p>
         <p class="t-small" data-open-line></p>

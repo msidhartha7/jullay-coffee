@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import NotebookPages from '../components/scenes/NotebookPages.astro';
-import { cafe } from '../data/cafe';
+import { cafe, span } from '../data/cafe';
 
 const ld = {
   '@context': 'https://schema.org',
@@ -48,7 +48,7 @@ const ld = {
       <h2 id="m-visit-h" class="t-eyebrow">Visit</h2>
       <address class="t-body">{cafe.address.map((l) => <span>{l}<br /></span>)}</address>
       <p class="t-small">{cafe.addressNote}</p>
-      <p class="t-body">{cafe.hours.map((h) => `${h.days}, ${h.open} to ${h.close} (${cafe.hoursNote.toLowerCase()}).`)} {cafe.food.tuesday}</p>
+      <p class="t-body">{cafe.hours.map((h) => `${h.days}, ${span(h)}.`)} {cafe.food.tuesday}</p>
       <p class="t-body"><a href={cafe.mapUrl} target="_blank" rel="noopener">Open in maps</a> · <a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
     </section>
   </main>
