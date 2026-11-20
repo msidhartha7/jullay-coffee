@@ -21,7 +21,12 @@ const ultras = medals.filter((m) => m.kind === 'ultra').length;
       <div class="plank"><span>The wall</span></div>
       <h1 id="w-h" class="t-display-xl">Run first.<br />Coffee after.</h1>
       <p class="t-tagline">{founder.line}</p>
-      {founder.bio.length > 0 && <div class="w-bio">{founder.bio.map((p) => <p class="t-body">{p}</p>)}</div>}
+      {founder.bio.length > 0 && (
+        <figure class="w-bio">
+          <blockquote>{founder.bio.map((p) => <p>{p}</p>)}</blockquote>
+          <figcaption class="t-eyebrow">{founder.name}</figcaption>
+        </figure>
+      )}
       <dl class="w-stats">
         <div><dt class="t-small">Longest run</dt><dd class="t-headline">{longest} km</dd></div>
         <div><dt class="t-small">Ultras and trails</dt><dd class="t-headline">{ultras}</dd></div>
@@ -83,7 +88,10 @@ const ultras = medals.filter((m) => m.kind === 'ultra').length;
 
   .w-hero { display: grid; justify-items: center; gap: var(--space-2); text-align: center; padding: var(--space-4) var(--space-3) var(--space-3); }
   .w-hero .t-tagline { color: var(--jullay-cream); max-width: 34ch; }
-  .w-bio { max-width: 60ch; display: grid; gap: var(--space-1); }
+  .w-bio { margin: var(--space-1) 0 0; display: grid; gap: var(--space-1); justify-items: center; padding: var(--space-2) var(--space-3); border-top: 1px solid var(--jullay-cream); border-bottom: 1px solid var(--jullay-cream); }
+  .w-bio blockquote { margin: 0; display: grid; gap: 2px; }
+  .w-bio p { font: 300 22px / 30px var(--font-sans); letter-spacing: 0.02em; color: var(--jullay-milk); }
+  .w-bio figcaption { color: var(--jullay-cream); }
   .plank {
     display: grid; place-items: center; padding: 10px 48px; background-color: var(--jullay-stone); outline: 1.5px solid var(--jullay-ink);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12'%3E%3Cpath d='M0 3 C30 1 60 5 90 3 S140 1 160 3' fill='none' stroke='%231c1a14' stroke-width='.7' opacity='.55'/%3E%3Cpath d='M0 9 C40 10 70 7 110 9 S150 10 160 9' fill='none' stroke='%231c1a14' stroke-width='.5' opacity='.45'/%3E%3C/svg%3E");

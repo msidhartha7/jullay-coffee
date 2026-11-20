@@ -27,8 +27,8 @@ export type Medal = {
 
 export const founder = {
   name: 'Ayaan',
-  // TODO: Ayaan's own words. Leave empty until they arrive; the site shows nothing in his voice until then.
-  bio: [] as string[],
+  // Ayaan's own words, verbatim.
+  bio: ['Coffee, food, books.', 'A neighbourhood cafe.', 'No hype. Just coffee.'] as string[],
   line: 'Everything on this wall was run by Ayaan, who started Jullay.',
 };
 

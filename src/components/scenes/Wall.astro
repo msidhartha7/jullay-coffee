@@ -13,7 +13,12 @@ const longest = Math.max(...medals.map((m) => m.km ?? 0));
       <p class="t-eyebrow">Above the shelves</p>
       <h2 id="wall-h" class="t-display">Run first. Coffee after.</h2>
       <p class="t-body">{founder.line}</p>
-      {founder.bio.map((p) => <p class="t-body">{p}</p>)}
+      {founder.bio.length > 0 && (
+        <figure class="wall-bio">
+          <blockquote>{founder.bio.map((p) => <p>{p}</p>)}</blockquote>
+          <figcaption class="t-eyebrow">{founder.name}</figcaption>
+        </figure>
+      )}
       <p class="wall-stat"><span class="t-headline">{longest} km</span><span class="t-small">The longest run on the wall.</span></p>
       <BibString bibs={bibs.slice(0, 5)} />
       <a class="to-wall" href="/wall">
@@ -27,6 +32,10 @@ const longest = Math.max(...medals.map((m) => m.km ?? 0));
 <style>
   .wall-body { grid-template-columns: minmax(280px, 0.85fr) 1.3fr; align-items: center; }
   .wall-copy { min-width: 0; }
+  .wall-bio { margin: 0; display: grid; gap: 4px; padding-left: var(--space-2); border-left: 2px solid var(--jullay-cream); }
+  .wall-bio blockquote { margin: 0; }
+  .wall-bio p { font: 300 19px / 26px var(--font-sans); letter-spacing: 0.02em; }
+  .wall-bio figcaption { color: var(--jullay-cream); }
   .wall-stat { display: flex; align-items: baseline; gap: var(--space-1); border-top: 1px solid var(--jullay-cream); padding-top: var(--space-1); }
   .wall-stat .t-small { color: var(--jullay-cream); }
   .to-wall { justify-self: start; text-decoration: none; }
