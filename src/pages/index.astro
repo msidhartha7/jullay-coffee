@@ -8,6 +8,7 @@ import Leaving from '../components/scenes/Leaving.astro';
 import MenuBook from '../components/scenes/MenuBook.astro';
 import { mugs, mugSVG } from '../lib/mugs';
 import { cafe } from '../data/cafe';
+import { medals } from '../data/wall';
 ---
 <Base>
   <script is:inline>document.documentElement.classList.add('js');</script>
@@ -25,6 +26,7 @@ import { cafe } from '../data/cafe';
     <span class="companion-mug is-hot" data-companion-mug set:html={mugSVG(mugs[0], { uid: 'companion', steam: true })} />
   </button>
 
+  <script type="application/json" id="wall-data" set:html={JSON.stringify(medals.map(({ id, race, km, distance, when, where, note, kind }) => ({ id, race, km, distance, when, where, note, kind })))} />
   <script type="application/json" id="drinks-data" set:html={JSON.stringify(cafe.drinks)} />
   <script>
     import '../scripts/main';

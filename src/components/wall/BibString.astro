@@ -1,0 +1,38 @@
+---
+// Race bibs pegged on a string, as on the cafe wall.
+import type { Colour } from '../../data/wall';
+interface Props { bibs: { no: string; race: string; colour: Colour }[] }
+const { bibs } = Astro.props;
+const C: Record<Colour, [string, string]> = {
+  cream: ['#f8eacf', '#1c1a14'], oat: ['#e0cfbc', '#1c1a14'], olive: ['#6b7830', '#fefdfb'], moss: ['#576544', '#fefdfb'],
+  forest: ['#3c4128', '#f8eacf'], ink: ['#1c1a14', '#f8eacf'], stone: ['#b49a7c', '#1c1a14'], milk: ['#fefdfb', '#1c1a14'],
+};
+---
+<div class="bibs" aria-label="Race bibs on the string">
+  <svg class="bib-string" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M0 2 Q50 9 100 2" fill="none" stroke="#e0cfbc" stroke-width=".6" vector-effect="non-scaling-stroke" /></svg>
+  <ul role="list">
+    {bibs.map((b, i) => (
+      <li class="bib" style={`--bg:${C[b.colour][0]};--fg:${C[b.colour][1]};--tilt:${((i * 37) % 7) - 3}deg`}>
+        <span class="bib-no">{b.no}</span>
+        <span class="bib-race">{b.race}</span>
+        <span class="bib-name" aria-hidden="true">AYAAN</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .bibs { position: relative; min-width: 0; }
+  .bib-string { position: absolute; left: 0; right: 0; top: 4px; width: 100%; height: 14px; }
+  ul { list-style: none; margin: 0; padding: 10px 4px 4px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .bib {
+    flex: none; width: 104px; display: grid; justify-items: center; gap: 0; padding: 12px 6px 6px; position: relative;
+    background: var(--bg); color: var(--fg); outline: 1.5px solid var(--jullay-ink); transform: rotate(var(--tilt)); transform-origin: 50% 0;
+  }
+  .bib::before, .bib::after { content: ''; position: absolute; top: 4px; width: 5px; height: 5px; border-radius: var(--radius-pill); background: var(--jullay-ink); }
+  .bib::before { left: 6px; }
+  .bib::after { right: 6px; }
+  .bib-no { font: 800 26px / 1 var(--font-display); letter-spacing: -0.02em; }
+  .bib-race { font: 400 10px / 13px var(--font-sans); text-align: center; min-height: 26px; display: grid; place-items: center; }
+  .bib-name { font: 600 9px / 1 var(--font-sans); letter-spacing: .2em; opacity: .8; }
+</style>

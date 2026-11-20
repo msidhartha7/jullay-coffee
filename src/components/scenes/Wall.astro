@@ -1,0 +1,43 @@
+---
+import MedalRail from '../wall/MedalRail.astro';
+import BibString from '../wall/BibString.astro';
+import { medals, bibs, founder } from '../../data/wall';
+
+const highlights = medals.filter((m) => m.highlight);
+const longest = Math.max(...medals.map((m) => m.km ?? 0));
+---
+<div class="panel panel-wall" id="wall" data-zone="wall" aria-labelledby="wall-h">
+  <div class="plank"><span>The wall</span></div>
+  <div class="panel-body wall-body">
+    <div class="panel-copy wall-copy">
+      <p class="t-eyebrow">Above the shelves</p>
+      <h2 id="wall-h" class="t-display">Run first. Coffee after.</h2>
+      <p class="t-body">{founder.line}</p>
+      {founder.bio.map((p) => <p class="t-body">{p}</p>)}
+      <p class="wall-stat"><span class="t-headline">{longest} km</span><span class="t-small">The longest run on the wall.</span></p>
+      <BibString bibs={bibs.slice(0, 5)} />
+      <a class="to-wall" href="/wall">
+        <span class="to-wall-arrow"><span class="to-wall-plaque">The whole wall</span></span>
+      </a>
+    </div>
+    <MedalRail medals={highlights} id="room-rail" label="Some of the medals on the wall" />
+  </div>
+</div>
+
+<style>
+  .wall-body { grid-template-columns: minmax(280px, 0.85fr) 1.3fr; align-items: center; }
+  .wall-copy { min-width: 0; }
+  .wall-stat { display: flex; align-items: baseline; gap: var(--space-1); border-top: 1px solid var(--jullay-cream); padding-top: var(--space-1); }
+  .wall-stat .t-small { color: var(--jullay-cream); }
+  .to-wall { justify-self: start; text-decoration: none; }
+  .to-wall-arrow {
+    display: inline-flex; align-items: center; height: 50px; padding: 0 52px 0 16px;
+    background-color: var(--jullay-stone);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12'%3E%3Cpath d='M0 3 C30 1 60 5 90 3 S140 1 160 3' fill='none' stroke='%231c1a14' stroke-width='.7' opacity='.55'/%3E%3Cpath d='M0 9 C40 10 70 7 110 9 S150 10 160 9' fill='none' stroke='%231c1a14' stroke-width='.5' opacity='.45'/%3E%3C/svg%3E");
+    clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 50%, calc(100% - 28px) 100%, 0 100%);
+    transition: transform .3s cubic-bezier(.3,1.4,.5,1);
+  }
+  .to-wall-plaque { background: var(--jullay-ink); color: var(--jullay-milk); padding: 7px 12px; font: 700 14px / 1 var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; }
+  .to-wall:hover .to-wall-arrow { transform: translateX(8px); }
+  .to-wall:focus-visible { outline: 2px solid var(--jullay-milk); outline-offset: 2px; }
+</style>

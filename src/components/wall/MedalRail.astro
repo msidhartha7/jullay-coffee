@@ -1,0 +1,55 @@
+---
+// A wooden peg rail of medals. Tap one to read it on the card.
+import type { Medal } from '../../data/wall';
+import { medalSVG } from '../../lib/medals';
+interface Props { medals: Medal[]; id: string; label?: string }
+const { medals, id, label = 'Medals on the rail' } = Astro.props;
+const dist = (m: Medal) => m.distance ?? (m.km ? `${m.km} km` : '');
+---
+<div class="rail-wrap" data-rail-scope>
+  <div class="rail" role="group" aria-label={label}>
+    <div class="rail-bar" aria-hidden="true"></div>
+    <div class="rail-row">
+      {medals.map((m) => (
+        <button type="button" class="medal-btn" data-medal={m.id} data-kind={m.kind} aria-pressed="false" aria-controls={`${id}-card`}
+          aria-label={[m.race, dist(m), m.when].filter(Boolean).join(', ')}>
+          <Fragment set:html={medalSVG(m, `${id}-${m.id}`)} />
+        </button>
+      ))}
+    </div>
+  </div>
+  <div class="medal-card" id={`${id}-card`} aria-live="polite" data-medal-card>
+    <p class="t-eyebrow mc-eyebrow" data-mc-kind>On the rail</p>
+    <p class="t-title" data-mc-race>Tap a medal.</p>
+    <p class="t-small" data-mc-meta>Every one was run, then hung here.</p>
+    <p class="t-small mc-note" data-mc-note></p>
+  </div>
+</div>
+
+<style>
+  .rail-wrap { display: grid; gap: var(--space-2); min-width: 0; }
+  .rail { position: relative; min-width: 0; }
+  .rail-bar {
+    position: absolute; left: 0; right: 0; top: 0; height: 18px; z-index: 2;
+    background-color: var(--jullay-stone); outline: 1.5px solid var(--jullay-ink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12'%3E%3Cpath d='M0 3 C30 1 60 5 90 3 S140 1 160 3' fill='none' stroke='%231c1a14' stroke-width='.7' opacity='.55'/%3E%3Cpath d='M0 9 C40 10 70 7 110 9 S150 10 160 9' fill='none' stroke='%231c1a14' stroke-width='.5' opacity='.45'/%3E%3C/svg%3E");
+  }
+  .rail-row { display: flex; gap: 4px; padding: 6px 10px 18px; overflow-x: auto; scrollbar-width: none; }
+  .medal-btn {
+    flex: 1 1 0; min-width: 44px; max-width: 76px; padding: 0; transform-origin: 50% 0;
+    transition: transform .3s ease;
+  }
+  .medal-btn :global(svg) { display: block; width: 100%; height: auto; overflow: visible; }
+  .medal-btn:hover { transform: rotate(3deg); }
+  .medal-btn[aria-pressed="true"] { animation: swing 1.6s ease-out; }
+  .medal-btn[aria-pressed="true"]::after { content: ''; display: block; height: 3px; margin: 4px 8px 0; background: var(--jullay-cream); }
+  .medal-btn[hidden] { display: none; }
+  .medal-btn:focus-visible { outline: 2px solid var(--jullay-milk); outline-offset: 2px; }
+  @keyframes swing { 0% { transform: rotate(0); } 15% { transform: rotate(9deg); } 35% { transform: rotate(-6deg); } 55% { transform: rotate(3.5deg); } 75% { transform: rotate(-1.5deg); } 100% { transform: rotate(0); } }
+
+  .medal-card { background: var(--jullay-milk); color: var(--jullay-ink); padding: var(--space-2); display: grid; gap: 2px; border-top: 2px dashed var(--jullay-ink); max-width: 460px; }
+  .mc-eyebrow { color: var(--jullay-moss); }
+  .mc-note { color: var(--jullay-moss); }
+  .mc-note:empty { display: none; }
+  @media (prefers-reduced-motion: reduce) { .medal-btn[aria-pressed="true"] { animation: none; } }
+</style>

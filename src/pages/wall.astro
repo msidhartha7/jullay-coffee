@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import MedalRail from '../components/wall/MedalRail.astro';
+import BibString from '../components/wall/BibString.astro';
+import { cafe } from '../data/cafe';
+import { medals, bibs, founder, kinds, wallPhotos } from '../data/wall';
+
+const groups = kinds.map((k) => ({ ...k, medals: medals.filter((m) => m.kind === k.id) })).filter((g) => g.medals.length);
+const longest = Math.max(...medals.map((m) => m.km ?? 0));
+const ultras = medals.filter((m) => m.kind === 'ultra').length;
+---
+<Base title={`The wall. ${cafe.name}`} description={`The medals and race bibs on the wall at Jullay Coffee, run by ${founder.name}, who started Jullay. Ultras, trails, halves and 10Ks.`}>
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <header class="w-head">
+    <a href="/" class="w-logo" aria-label="Jullay Coffee, home"><span class="logo" aria-hidden="true"></span></a>
+    <a href="/#wall" class="w-back"><span aria-hidden="true">←</span> Back to the cafe</a>
+  </header>
+
+  <main>
+    <section class="w-hero" aria-labelledby="w-h">
+      <div class="plank"><span>The wall</span></div>
+      <h1 id="w-h" class="t-display-xl">Run first.<br />Coffee after.</h1>
+      <p class="t-tagline">{founder.line}</p>
+      {founder.bio.length > 0 && <div class="w-bio">{founder.bio.map((p) => <p class="t-body">{p}</p>)}</div>}
+      <dl class="w-stats">
+        <div><dt class="t-small">Longest run</dt><dd class="t-headline">{longest} km</dd></div>
+        <div><dt class="t-small">Ultras and trails</dt><dd class="t-headline">{ultras}</dd></div>
+        <div><dt class="t-small">Listed so far</dt><dd class="t-headline">{medals.length}</dd></div>
+      </dl>
+    </section>
+
+    <div class="w-tools" role="group" aria-label="Show medals">
+      <button type="button" class="tag w-chip" aria-pressed="true" data-kind-filter="all">All</button>
+      {groups.map((g) => <button type="button" class="tag w-chip" aria-pressed="false" data-kind-filter={g.id}>{g.label}</button>)}
+    </div>
+
+    <div class="w-rails">
+      {groups.map((g) => (
+        <section class="w-rail" data-rail-section={g.id} aria-labelledby={`wr-${g.id}`}>
+          <h2 id={`wr-${g.id}`} class="w-rail-h"><span class="t-title">{g.label}</span> <span class="t-small">{g.medals.length}</span></h2>
+          <MedalRail medals={g.medals} id={`rail-${g.id}`} label={g.label} />
+        </section>
+      ))}
+    </div>
+
+    <section class="w-bibs" aria-labelledby="w-bibs-h">
+      <h2 id="w-bibs-h" class="t-title">The bibs</h2>
+      <p class="t-small">Pinned on strings by the door. A few of them:</p>
+      <BibString bibs={bibs} />
+    </section>
+
+    <section class="w-photos" aria-labelledby="w-photos-h">
+      <h2 id="w-photos-h" class="t-title">The real wall</h2>
+      <p class="t-small">Come in and look up.</p>
+      <div class="w-grid">
+        {wallPhotos.map((p, i) => (
+          <figure class={i === 0 ? 'is-wide' : p.h < 600 ? 'is-strip' : ''}>
+            <img src={p.src} alt={p.alt} width={p.w} height={p.h} loading="lazy" decoding="async" />
+          </figure>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-foot">
+    <p class="t-small">{cafe.address.slice(1).join(', ')}.</p>
+    <p class="t-small"><a href="/">Walk in</a> · <a href="/menu">Menu</a> · <a href="/library">Library</a> · <a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
+  </footer>
+
+  <script type="application/json" id="wall-data" set:html={JSON.stringify(medals.map(({ id, race, km, distance, when, where, note, kind }) => ({ id, race, km, distance, when, where, note, kind })))} />
+  <script>
+    import { initWall } from '../scripts/wall';
+    initWall();
+  </script>
+</Base>
+
+<style>
+  :global(body) { background: var(--jullay-olive); color: var(--jullay-milk); }
+  .w-head { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; height: 56px; padding: 0 var(--space-3); background: var(--jullay-olive); border-bottom: 1.5px solid var(--jullay-ink); }
+  .w-logo { width: 92px; color: var(--jullay-milk); }
+  .w-back { color: var(--jullay-milk); font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; gap: 6px; }
+  main :focus-visible, .w-head :focus-visible, .w-foot :focus-visible { outline-color: var(--jullay-milk); }
+
+  .w-hero { display: grid; justify-items: center; gap: var(--space-2); text-align: center; padding: var(--space-4) var(--space-3) var(--space-3); }
+  .w-hero .t-tagline { color: var(--jullay-cream); max-width: 34ch; }
+  .w-bio { max-width: 60ch; display: grid; gap: var(--space-1); }
+  .plank {
+    display: grid; place-items: center; padding: 10px 48px; background-color: var(--jullay-stone); outline: 1.5px solid var(--jullay-ink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12'%3E%3Cpath d='M0 3 C30 1 60 5 90 3 S140 1 160 3' fill='none' stroke='%231c1a14' stroke-width='.7' opacity='.55'/%3E%3Cpath d='M0 9 C40 10 70 7 110 9 S150 10 160 9' fill='none' stroke='%231c1a14' stroke-width='.5' opacity='.45'/%3E%3C/svg%3E");
+  }
+  .plank span { background: var(--jullay-ink); color: var(--jullay-milk); padding: 8px 18px; font: 700 18px / 1 var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; }
+  .w-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); margin: var(--space-2) 0 0; }
+  .w-stats div { display: grid; gap: 2px; border-top: 1px solid var(--jullay-cream); padding-top: var(--space-1); min-width: 120px; }
+  .w-stats dt { color: var(--jullay-cream); }
+  .w-stats dd { margin: 0; }
+
+  .w-tools { position: sticky; top: 56px; z-index: 10; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: var(--space-2) var(--space-3); background: var(--jullay-olive); }
+  .w-chip { min-height: 32px; padding: 6px 12px; cursor: pointer; background: transparent; color: var(--jullay-cream); box-shadow: inset 0 0 0 1px var(--jullay-cream); }
+  .w-chip[aria-pressed="true"] { background: var(--jullay-cream); color: var(--jullay-ink); }
+
+  .w-rails, .w-bibs, .w-photos { max-width: 1200px; margin: 0 auto; padding: var(--space-3); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
+  .w-rail { display: grid; gap: var(--space-2); min-width: 0; }
+  .w-rail[hidden] { display: none; }
+  .w-rail-h { display: flex; align-items: baseline; gap: var(--space-1); }
+  .w-rail-h .t-small { color: var(--jullay-cream); }
+  .w-bibs, .w-photos { gap: var(--space-1); }
+  .w-bibs .t-small, .w-photos .t-small { color: var(--jullay-cream); }
+
+  .w-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); margin-top: var(--space-1); }
+  .w-grid figure { margin: 0; outline: 1.5px solid var(--jullay-ink); background: var(--jullay-forest); }
+  .w-grid figure.is-wide, .w-grid figure.is-strip { grid-column: 1 / -1; }
+  .w-grid img { display: block; width: 100%; height: auto; }
+
+  .w-foot { display: grid; gap: 4px; justify-items: center; text-align: center; padding: var(--space-3); background: var(--jullay-forest); color: var(--jullay-cream); }
+
+  @media (max-width: 700px) {
+    .w-head, .w-rails, .w-bibs, .w-photos { padding-left: var(--space-2); padding-right: var(--space-2); }
+    .w-tools { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding: var(--space-1) var(--space-2); }
+    .w-chip { white-space: nowrap; }
+    .w-grid { grid-template-columns: 1fr; }
+  }
+</style>

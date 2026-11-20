@@ -3,6 +3,7 @@ const zones = [
   { id: 'caffeine', label: 'Caffeine', target: 'mugs' },
   { id: 'carbs', label: 'Carbs', target: 'carbs' },
   { id: 'chapters', label: 'Chapters', target: 'chapters' },
+  { id: 'wall', label: 'The wall', target: 'wall' },
 ];
 ---
 <header class="topbar">
@@ -49,7 +50,7 @@ const zones = [
     .topbar { grid-template-columns: auto 1fr; padding: 0 var(--space-2); height: 52px; }
     .topbar-logo { width: 72px; }
     .zones { position: fixed; left: 0; right: 0; bottom: 0; justify-content: center; padding: var(--space-1); background: var(--jullay-olive); }
-    .plaque { font-size: 12px; padding: 0 10px; height: 36px; }
+    .plaque { font-size: 11px; letter-spacing: .1em; padding: 0 8px; height: 36px; }
     .open-tag { display: none; }
   }
 </style>

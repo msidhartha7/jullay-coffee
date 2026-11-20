@@ -78,13 +78,13 @@ export function initCamera() {
   });
 
   /** Scroll to a panel by id, in whichever layout is live. */
-  function goTo(id: string) {
+  function goTo(id: string, instant = false) {
     const el = document.getElementById(id);
     if (!el) return;
     const rm = reducedMotion();
     const scrollTo = (y: number) => {
       const dist = Math.abs(window.scrollY - y);
-      if (rm) window.scrollTo(0, y);
+      if (rm || instant) window.scrollTo(0, y);
       else gsap.to(window, { scrollTo: { y, autoKill: false }, duration: Math.min(1.6, 0.5 + dist / 3000), ease: 'power2.inOut' });
     };
     if (roomST && track.contains(el)) {
