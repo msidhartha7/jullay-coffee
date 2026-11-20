@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import Topbar from '../components/scenes/Topbar.astro';
+import Outside from '../components/scenes/Outside.astro';
+import Room from '../components/scenes/Room.astro';
+import WorksOut from '../components/scenes/WorksOut.astro';
+import Leaving from '../components/scenes/Leaving.astro';
+import { mugs, mugSVG } from '../lib/mugs';
+import { cafe } from '../data/cafe';
+---
+<Base>
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <h1 class="sr-only">{cafe.name}. {cafe.tagline}</h1>
+  <Topbar />
+  <main>
+    <Outside />
+    <Room />
+    <WorksOut />
+  </main>
+  <Leaving />
+
+  <button type="button" class="companion" data-companion aria-label="Your mug: The camp mug. Go back to the mug wall.">
+    <span class="companion-mug is-hot" data-companion-mug set:html={mugSVG(mugs[0], { uid: 'companion', steam: true })} />
+  </button>
+
+  <script type="application/json" id="drinks-data" set:html={JSON.stringify(cafe.drinks)} />
+  <script>
+    import '../scripts/main';
+  </script>
+</Base>
+
+<style>
+  .companion {
+    position: fixed; right: var(--space-2); bottom: var(--space-2); z-index: 40; width: 76px; height: 84px;
+    display: grid; place-items: end center; opacity: 0; transform: translateY(20px); pointer-events: none;
+    transition: opacity .3s, transform .3s;
+  }
+  .companion.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+  .companion-mug { display: block; width: 100%; }
+  .companion-mug :global(svg) { width: 100%; height: auto; display: block; overflow: visible; }
+  .companion :global(.steam path) { stroke: var(--jullay-ink); }
+  .companion:focus-visible { outline-color: var(--jullay-ink); }
+  @media (max-width: 860px) {
+    .companion { width: 52px; height: 58px; bottom: 64px; right: var(--space-1); }
+  }
+</style>

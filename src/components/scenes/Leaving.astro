@@ -1,0 +1,61 @@
+---
+import Shopfront from '../art/Shopfront.astro';
+import { cafe } from '../../data/cafe';
+---
+<footer class="leaving" data-theme="forest">
+  <div class="dusk"><Shopfront id="shopfront-dusk" variant="dusk" /></div>
+  <div class="leaving-body">
+    <div class="bye">
+      <p class="bye-word">{cafe.greeting.word}</p>
+      <p class="t-tagline">Thank you for coming in.</p>
+    </div>
+    <div class="facts">
+      <div>
+        <p class="t-eyebrow">Find us</p>
+        <address class="t-body">{cafe.address.map((l) => <span>{l}<br /></span>)}</address>
+        <a class="btn" href={cafe.mapUrl} target="_blank" rel="noopener">Open in maps</a>
+      </div>
+      <div>
+        <p class="t-eyebrow">Hours</p>
+        <ul class="t-body hours" role="list">
+          {cafe.hours.map((h) => <li><span>{h.days}</span><span>{h.open} to {h.close}</span></li>)}
+        </ul>
+        <p class="t-small" data-open-line></p>
+      </div>
+      <div>
+        <p class="t-eyebrow">Say jullay</p>
+        <p class="t-body"><a href={cafe.instagram.url} target="_blank" rel="noopener">{cafe.instagram.handle}</a></p>
+        <p class="t-body"><a href={`mailto:${cafe.email}`}>{cafe.email}</a></p>
+        <p class="t-body"><a href="/menu">The full menu</a></p>
+      </div>
+    </div>
+    <div class="lockup">
+      <span class="logo" aria-label="Jullay Coffee" role="img"></span>
+      <span class="rule" aria-hidden="true"></span>
+      <p class="t-overline">{cafe.tagline}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .leaving { background: var(--surface); color: var(--text); }
+  .dusk { height: 46svh; overflow: hidden; border-bottom: 1.5px solid var(--jullay-ink); }
+  .leaving-body { padding: var(--space-4) var(--space-3); display: grid; gap: var(--space-4); max-width: 1200px; margin: 0 auto; }
+  .bye-word { font: 800 clamp(72px, 12vw, 160px) / 0.9 var(--font-display); letter-spacing: -0.03em; color: var(--jullay-milk); }
+  .bye .t-tagline { color: var(--text-muted); margin-top: var(--space-1); }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+  .facts > div { display: grid; gap: var(--space-1); align-content: start; }
+  .facts .t-eyebrow { color: var(--text-muted); }
+  address { font-style: normal; }
+  .hours { list-style: none; margin: 0; padding: 0; }
+  .hours li { display: flex; justify-content: space-between; gap: var(--space-2); max-width: 300px; border-bottom: 1px solid var(--border); padding: 4px 0; }
+  .facts .btn { justify-self: start; margin-top: var(--space-1); }
+  .lockup { display: grid; justify-items: center; gap: var(--space-2); padding-bottom: var(--space-3); color: var(--jullay-cream); }
+  .lockup .logo { width: 200px; color: var(--jullay-cream); }
+  .rule { width: 150px; height: 18px; border-top: 5px solid var(--accent); border-bottom: 5px solid var(--accent); }
+  @media (max-width: 860px) {
+    .facts { grid-template-columns: 1fr; }
+    .leaving-body { padding: var(--space-3) var(--space-2) calc(var(--space-4) + 40px); }
+    .dusk { height: 34svh; }
+  }
+</style>

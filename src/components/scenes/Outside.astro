@@ -1,0 +1,52 @@
+---
+import Shopfront from '../art/Shopfront.astro';
+import { cafe } from '../../data/cafe';
+---
+<section id="outside" class="outside" aria-label="Outside the cafe">
+  <div class="outside-stage">
+    <div class="outside-cam" data-cam>
+      <Shopfront id="shopfront" />
+    </div>
+    <p class="outside-overline t-overline">{cafe.tagline}</p>
+    <button type="button" class="walk-in" data-walk-in>
+      <span class="sr-only">Walk in</span>
+    </button>
+    <p class="scroll-hint t-eyebrow" aria-hidden="true">Scroll to walk in</p>
+
+    <div class="hello" data-hello>
+      <p class="hello-word">{cafe.greeting.word}</p>
+      <p class="t-tagline hello-meaning">{cafe.greeting.meaning}</p>
+      <p class="t-eyebrow hello-hint" aria-hidden="true">Come in</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .outside { position: relative; background: var(--jullay-forest); }
+  .outside-stage { position: relative; height: 100svh; overflow: hidden; }
+  .outside-cam { position: absolute; inset: 0; will-change: transform; transform-origin: 50% 65.5%; }
+  .outside-overline {
+    position: absolute; top: 84px; left: 0; right: 0; text-align: center; color: var(--jullay-ink);
+  }
+  .walk-in {
+    position: absolute; left: 50%; top: 65.5%; width: min(30vw, 46svh); height: 46svh;
+    transform: translate(-50%, -50%); cursor: pointer;
+  }
+  .walk-in:focus-visible { outline: 2px solid var(--jullay-milk); outline-offset: 4px; }
+  .scroll-hint {
+    position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: var(--jullay-ink);
+    animation: nudge 2.4s ease-in-out infinite;
+  }
+  @keyframes nudge { 50% { transform: translateY(5px); } }
+
+  .hello {
+    display: grid; place-content: center; gap: var(--space-2); text-align: center;
+    padding: var(--space-4) var(--space-3); background: var(--jullay-forest); color: var(--jullay-cream);
+    min-height: 60svh;
+  }
+  .hello-word { font: 800 clamp(88px, 18vw, 220px) / 0.9 var(--font-display); letter-spacing: -0.03em; color: var(--jullay-milk); }
+  .hello-meaning { max-width: 28ch; margin: 0 auto; }
+  .hello-hint { color: var(--jullay-cream); margin-top: var(--space-3); }
+
+  :global(html.js) .hello { position: absolute; inset: 0; opacity: 0; pointer-events: none; min-height: 0; }
+</style>

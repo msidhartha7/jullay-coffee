@@ -1,0 +1,93 @@
+---
+import { cafe } from '../../data/cafe';
+
+const fill = (b: (typeof cafe.books)[number]) => {
+  if (b.id === 'hours') return cafe.hours.map((h) => `${h.days}: ${h.open} to ${h.close}.`);
+  if (b.id === 'find') return [...cafe.address.slice(1), cafe.instagram.handle];
+  return b.body;
+};
+const books = cafe.books.map((b) => ({ ...b, body: fill(b) }));
+const colours: Record<string, [string, string]> = {
+  cream: ['#f8eacf', '#1c1a14'], oat: ['#e0cfbc', '#1c1a14'], olive: ['#6b7830', '#fefdfb'], moss: ['#576544', '#fefdfb'],
+  forest: ['#3c4128', '#f8eacf'], ink: ['#1c1a14', '#f8eacf'], stone: ['#b49a7c', '#1c1a14'], milk: ['#fefdfb', '#1c1a14'],
+};
+const first = books[0];
+---
+<div class="panel panel-chapters" id="chapters" data-zone="chapters" aria-labelledby="chapters-h">
+  <div class="plank"><span>Chapters</span></div>
+  <div class="panel-body chapters-body">
+    <div class="shelf-wrap">
+      <div class="panel-copy">
+        <p class="t-eyebrow">The nook</p>
+        <h2 id="chapters-h" class="t-display">Pull a book.</h2>
+      </div>
+      <div class="shelf" role="tablist" aria-label="Books on the shelf">
+        {books.map((b, i) => {
+          const [bg, fg] = colours[b.colour];
+          return (
+            <button type="button" class="spine" role="tab" id={`spine-${b.id}`} aria-controls="open-book"
+              aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-book={b.id}
+              style={`--bg:${bg};--fg:${fg};height:${b.height}%;width:${b.width}px`}>
+              <span class="spine-text">{b.spine}</span>
+            </button>
+          );
+        })}
+        <span class="bookend" aria-hidden="true"></span>
+      </div>
+      <div class="shelf-board" aria-hidden="true"></div>
+    </div>
+
+    <article class="open-book" id="open-book" role="tabpanel" aria-labelledby={`spine-${first.id}`} data-open-book>
+      <div class="page page-l">
+        <p class="t-eyebrow page-eyebrow" data-book-spine>{first.spine}</p>
+        <h3 class="t-headline" data-book-title>{first.title}</h3>
+      </div>
+      <div class="page page-r" data-book-body>
+        {first.body.map((p) => <p class="t-body">{p}</p>)}
+      </div>
+    </article>
+  </div>
+  <script type="application/json" id="books-data" set:html={JSON.stringify(books.map(({ id, spine, title, body }) => ({ id, spine, title, body })))} />
+</div>
+
+<style>
+  .chapters-body { grid-template-columns: 1fr 1.1fr; align-items: center; }
+  .shelf-wrap { display: grid; gap: var(--space-3); }
+  .shelf {
+    height: min(44svh, 360px); display: flex; align-items: flex-end; gap: 3px;
+    padding: 0 var(--space-2); border-left: 14px solid var(--jullay-stone); border-right: 14px solid var(--jullay-stone);
+    outline: 1.5px solid var(--jullay-ink); background: var(--jullay-forest);
+  }
+  .spine {
+    position: relative; flex: none; background: var(--bg); color: var(--fg);
+    box-shadow: inset 0 0 0 1.5px var(--jullay-ink); display: grid; place-items: center;
+    transition: transform .35s cubic-bezier(.3,1.3,.5,1);
+  }
+  .spine::before, .spine::after { content: ''; position: absolute; left: 4px; right: 4px; height: 2px; background: var(--fg); opacity: .6; }
+  .spine::before { top: 12px; }
+  .spine::after { bottom: 12px; }
+  .spine-text { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 14px / 1 var(--font-display); letter-spacing: 0.06em; white-space: nowrap; }
+  .spine:hover { transform: translateY(-8px); }
+  .spine[aria-selected="true"] { transform: translateY(-22px) rotate(-4deg); }
+  .spine:focus-visible { outline-color: var(--jullay-milk); }
+  .bookend { width: 18px; height: 50%; background: var(--jullay-ink); margin-left: 6px; }
+  .shelf-board { height: 14px; background: var(--jullay-stone); outline: 1.5px solid var(--jullay-ink); margin-top: calc(-1 * var(--space-3)); }
+
+  .open-book {
+    display: grid; grid-template-columns: 1fr 1fr; min-height: min(52svh, 420px);
+    background: var(--jullay-cream); color: var(--jullay-ink); outline: 1.5px solid var(--jullay-ink);
+  }
+  .page { padding: var(--space-3); display: grid; align-content: start; gap: var(--space-2); }
+  .page-l { border-right: 1.5px solid var(--jullay-ink); align-content: space-between; }
+  .page-eyebrow { color: var(--jullay-moss); }
+  .page-r { gap: var(--space-1); }
+  .open-book.is-turning .page { animation: turn .45s ease; }
+  @keyframes turn { 0% { opacity: 0; transform: translateX(10px); } 100% { opacity: 1; transform: none; } }
+
+  @media (max-width: 860px) {
+    .shelf { height: 240px; overflow-x: auto; }
+    .open-book { grid-template-columns: 1fr; }
+    .page-l { border-right: 0; border-bottom: 1.5px solid var(--jullay-ink); }
+    .page { padding: var(--space-2); }
+  }
+</style>

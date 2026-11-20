@@ -1,0 +1,232 @@
+---
+// The shopfront, engraved. viewBox 1600 x 1000. The doorway is centred at (800, 655).
+interface Props { variant?: 'day' | 'dusk'; id?: string }
+const { variant = 'day', id = 'shopfront' } = Astro.props;
+
+const peaks: [number, number][] = [
+  [0, 250], [110, 168], [190, 214], [300, 104], [380, 186], [470, 132], [560, 222], [650, 146], [730, 196],
+  [830, 84], [910, 176], [990, 124], [1090, 214], [1190, 112], [1270, 184], [1370, 96], [1450, 172], [1530, 134], [1600, 206],
+];
+const range = `M0 300 L${peaks.map((p) => p.join(' ')).join(' L')} L1600 300 Z`;
+// shade the right face of each peak, cap the tall ones with snow
+const shades = peaks.slice(1, -1).map((p, i) => {
+  const next = peaks[i + 2];
+  return `M${p[0]} ${p[1]} L${next[0]} ${next[1]} L${next[0]} 300 L${p[0] + 18} 300 Z`;
+});
+const snow = peaks.filter((p) => p[1] < 150).map(([x, y]) =>
+  `M${x} ${y} L${x - 22} ${y + 26} L${x - 10} ${y + 20} L${x - 2} ${y + 30} L${x + 8} ${y + 20} L${x + 20} ${y + 24} Z`);
+
+const mural = 'M380 318 L450 262 L490 290 L560 236 L610 280 L660 252 L740 310 M760 318 L840 244 L880 278 L940 228 L1010 286 L1060 258 L1120 300 L1220 318';
+
+const flagCols = ['#6b7830', '#fefdfb', '#c23129', '#e0cfbc', '#3c4128'];
+const flags = Array.from({ length: 34 }, (_, i) => {
+  const t = i / 33;
+  const x = 70 + t * 1460;
+  const y = 196 + Math.sin(t * Math.PI) * 46;
+  return { x, y, c: flagCols[i % 5], r: (Math.cos(t * Math.PI) * 6).toFixed(1) };
+});
+
+const stripes = Array.from({ length: 22 }, (_, i) => ({ x: 360 + i * 40, olive: i % 2 === 1 }));
+const scallops = stripes.map((s) => `M${s.x} 420 a20 18 0 0 0 40 0`).join(' ');
+---
+<svg id={id} class={`shopfront shopfront--${variant}`} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" role="img"
+  aria-label="The Jullay Coffee shopfront: an olive-green facade under a striped awning, with glass doors, prayer flags and the mountains behind.">
+  <defs>
+    <clipPath id={`${id}-doorway`}><rect x="566" y="436" width="468" height="444" /></clipPath>
+  </defs>
+
+  <!-- sky and mountains -->
+  <rect class="sf-sky" width="1600" height="320" />
+  <circle class="sf-sun" cx="1280" cy="96" r="34" />
+  <path class="sf-range" d={range} />
+  {shades.map((d) => <path d={d} fill="url(#jh)" opacity=".55" />)}
+  {snow.map((d) => <path class="sf-snow" d={d} />)}
+  <path d={`M${peaks.map((p) => p.join(' ')).join(' L')}`} fill="none" stroke="#1c1a14" stroke-width="2" stroke-linejoin="round" />
+
+  <!-- building -->
+  <rect class="sf-wall" x="0" y="180" width="1600" height="720" />
+  <rect x="0" y="180" width="1600" height="720" fill="url(#jh-fine)" opacity=".18" />
+  <!-- pergola beams -->
+  <g class="sf-wood" stroke="#1c1a14" stroke-width="1.6">
+    <rect x="300" y="186" width="1000" height="22" />
+    {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => <rect x={310 + i * 120} y="168" width="18" height="44" />)}
+  </g>
+  <rect x="300" y="186" width="1000" height="22" fill="url(#jh-wood)" opacity=".7" />
+
+  <!-- mural -->
+  <path class="sf-mural" d={mural} fill="none" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" />
+  <circle class="sf-mural" cx="1160" cy="262" r="16" fill="none" stroke-width="2.4" />
+
+  <!-- prayer flags -->
+  <path d={`M70 196 Q800 ${196 + 92} 1530 196`} fill="none" stroke="#1c1a14" stroke-width="1.4" />
+  {flags.map((f) => (
+    <g transform={`translate(${f.x} ${f.y}) rotate(${f.r})`}>
+      <rect class="flag" x="-12" y="2" width="24" height="30" fill={f.c} stroke="#1c1a14" stroke-width="1" />
+      <rect x="-12" y="2" width="24" height="30" fill="url(#jh-fine)" opacity=".35" />
+    </g>
+  ))}
+
+  <!-- side windows -->
+  {[60, 1320].map((x) => (
+    <g>
+      <rect class="sf-glass" x={x} y="470" width="220" height="300" stroke="#1c1a14" stroke-width="3" />
+      <rect x={x} y="470" width="220" height="300" fill="url(#jh-x)" opacity=".35" />
+      {[560, 660].map((y) => <rect class="sf-shelf" x={x + 10} y={y} width="200" height="8" stroke="#1c1a14" stroke-width="1" />)}
+      {[0, 1, 2, 3, 4].map((i) => (
+        <g class="sf-cup">
+          <path d={`M${x + 22 + i * 38} 528 h22 v24 q0 8 -8 8 h-6 q-8 0 -8 -8 z`} stroke="#1c1a14" stroke-width="1.2" />
+          <path d={`M${x + 22 + i * 38} 628 h22 v24 q0 8 -8 8 h-6 q-8 0 -8 -8 z`} stroke="#1c1a14" stroke-width="1.2" />
+        </g>
+      ))}
+      <line class="sf-frame" x1={x + 110} y1="470" x2={x + 110} y2="770" stroke-width="6" />
+      <rect class="sf-frame" x={x - 10} y="770" width="240" height="14" stroke="#1c1a14" stroke-width="1.5" />
+      <path d={`M${x + 30} 490 l60 80 M${x + 50} 490 l40 52 M${x + 140} 600 l60 80`} class="sf-glint" stroke-width="2" />
+    </g>
+  ))}
+
+  <!-- awning -->
+  <g stroke="#1c1a14" stroke-width="1.4">
+    {stripes.map((s) => <rect x={s.x} y="340" width="40" height="80" class={s.olive ? 'sf-awn-a' : 'sf-awn-b'} />)}
+  </g>
+  {stripes.filter((s) => s.olive).map((s) => <rect x={s.x} y="340" width="40" height="80" fill="url(#jh)" opacity=".4" />)}
+  <path d={scallops} class="sf-awn-b" stroke="#1c1a14" stroke-width="1.4" />
+  <rect x="352" y="332" width="896" height="12" class="sf-frame" />
+
+  <!-- doorway: interior glimpse -->
+  <g clip-path={`url(#${id}-doorway)`}>
+    <rect x="566" y="436" width="468" height="444" class="sf-inside" />
+    <rect x="566" y="436" width="468" height="444" fill="url(#jh-dense)" opacity=".35" />
+    {[650, 800, 950].map((x) => (
+      <g>
+        <line x1={x} y1="436" x2={x} y2="500" stroke="#1c1a14" stroke-width="1.5" />
+        <path d={`M${x - 18} 500 h36 l-6 18 h-24 z`} class="sf-lamp" stroke="#1c1a14" stroke-width="1.2" />
+        <circle cx={x} cy="526" r="7" class="sf-bulb" />
+      </g>
+    ))}
+    <rect x="600" y="700" width="400" height="180" class="sf-counter" stroke="#1c1a14" stroke-width="2" />
+    <rect x="600" y="700" width="400" height="180" fill="url(#jh-wood)" opacity=".8" />
+    <path d="M630 760 L690 724 L720 744 L770 712 L820 750 L860 730 L930 770" fill="none" class="sf-mural" stroke-width="2" />
+    <rect x="770" y="640" width="90" height="60" class="sf-machine" stroke="#1c1a14" stroke-width="1.5" />
+  </g>
+
+  <!-- doors -->
+  <g clip-path={`url(#${id}-doorway)`}>
+    <g class="door door-l">
+      <rect x="566" y="436" width="234" height="444" class="sf-door-glass" stroke="#1c1a14" stroke-width="10" />
+      <path d="M600 470 l90 130 M620 470 l56 80" class="sf-glint" stroke-width="2.4" />
+      <rect x="770" y="600" width="10" height="120" class="sf-frame" />
+    </g>
+    <g class="door door-r">
+      <rect x="800" y="436" width="234" height="444" class="sf-door-glass" stroke="#1c1a14" stroke-width="10" />
+      <path d="M840 470 l90 130 M860 470 l56 80" class="sf-glint" stroke-width="2.4" />
+      <rect x="820" y="600" width="10" height="120" class="sf-frame" />
+      <!-- open sign -->
+      <line x1="890" y1="470" x2="910" y2="520" stroke="#1c1a14" stroke-width="1.4" />
+      <line x1="990" y1="470" x2="970" y2="520" stroke="#1c1a14" stroke-width="1.4" />
+      <rect x="880" y="520" width="120" height="44" class="sf-sign" stroke="#1c1a14" stroke-width="1.6" />
+      <text x="940" y="549" text-anchor="middle" class="sf-sign-text" data-open-sign>Open</text>
+    </g>
+  </g>
+  <rect x="556" y="426" width="488" height="458" fill="none" class="sf-frame-stroke" stroke-width="12" />
+
+  <!-- pillar sign with the logo -->
+  <rect x="356" y="500" width="160" height="96" class="sf-logo-board" stroke="#1c1a14" stroke-width="2" />
+  <image href="/jullay-logo.png" x="370" y="518" width="132" height="51.3" preserveAspectRatio="xMidYMid meet" />
+  <line x1="436" y1="440" x2="436" y2="500" stroke="#1c1a14" stroke-width="2" />
+  <rect x="380" y="432" width="112" height="10" class="sf-frame" />
+
+  <!-- chalkboard -->
+  <g>
+    <path d="M1112 880 L1140 690 M1248 880 L1220 690" stroke="#1c1a14" stroke-width="6" />
+    <rect x="1124" y="690" width="112" height="150" class="sf-chalk" stroke="#1c1a14" stroke-width="5" />
+    <text x="1180" y="738" text-anchor="middle" class="sf-chalk-text">No hype.</text>
+    <text x="1180" y="768" text-anchor="middle" class="sf-chalk-text">Just</text>
+    <text x="1180" y="798" text-anchor="middle" class="sf-chalk-text">coffee.</text>
+    <path d="M1150 816 h60" class="sf-mural" stroke-width="1.6" />
+  </g>
+
+  <!-- bench -->
+  <g stroke="#1c1a14" stroke-width="1.6">
+    <rect x="110" y="812" width="340" height="18" class="sf-wood" />
+    <rect x="130" y="830" width="14" height="56" class="sf-wood" />
+    <rect x="416" y="830" width="14" height="56" class="sf-wood" />
+  </g>
+  <rect x="110" y="812" width="340" height="18" fill="url(#jh-wood)" opacity=".8" />
+
+  <!-- plants by the door -->
+  {[520, 1080].map((x) => (
+    <g>
+      <path d={`M${x - 26} 820 h52 l-8 64 h-36 z`} class="sf-pot" stroke="#1c1a14" stroke-width="1.6" />
+      <path d={`M${x - 26} 820 h52 l-8 64 h-36 z`} fill="url(#jh)" opacity=".5" />
+      <g class="sf-leaf" stroke="#1c1a14" stroke-width="1.2">
+        <path d={`M${x} 820 C${x - 50} 780 ${x - 70} 740 ${x - 60} 700 C${x - 30} 740 ${x - 10} 780 ${x} 820 Z`} />
+        <path d={`M${x} 820 C${x + 40} 770 ${x + 60} 730 ${x + 50} 690 C${x + 24} 734 ${x + 8} 780 ${x} 820 Z`} />
+        <path d={`M${x} 820 C${x - 10} 760 ${x - 4} 710 ${x + 6} 670 C${x + 16} 720 ${x + 10} 770 ${x} 820 Z`} />
+      </g>
+    </g>
+  ))}
+
+  <!-- tyre planter -->
+  <g>
+    <ellipse cx="1420" cy="866" rx="70" ry="26" class="sf-tyre" stroke="#1c1a14" stroke-width="2" />
+    <ellipse cx="1420" cy="866" rx="70" ry="26" fill="url(#jh-dense)" opacity=".6" />
+    <ellipse cx="1420" cy="858" rx="44" ry="12" class="sf-soil" stroke="#1c1a14" stroke-width="1.2" />
+    <g class="sf-leaf" stroke="#1c1a14" stroke-width="1.2">
+      <path d="M1420 858 C1380 820 1370 790 1384 760 C1404 796 1414 826 1420 858 Z" />
+      <path d="M1420 858 C1460 816 1474 786 1466 754 C1442 792 1428 824 1420 858 Z" />
+      <path d="M1420 858 C1414 806 1420 774 1432 744 C1440 786 1432 822 1420 858 Z" />
+    </g>
+  </g>
+
+  <!-- ground -->
+  <rect x="0" y="884" width="1600" height="116" class="sf-ground" />
+  <rect x="0" y="884" width="1600" height="116" fill="url(#jh-h)" opacity=".5" />
+  <line x1="0" y1="884" x2="1600" y2="884" stroke="#1c1a14" stroke-width="2.4" />
+  <path d="M0 940 H1600" stroke="#1c1a14" stroke-width="1" />
+  {Array.from({ length: 16 }, (_, i) => <line x1={i * 100 + 50} y1="884" x2={i * 100 + 30} y2="940" stroke="#1c1a14" stroke-width=".8" />)}
+</svg>
+
+<style>
+  .shopfront { display: block; width: 100%; height: 100%; }
+  .shopfront--day {
+    --sky: #f8eacf; --sun: #fefdfb; --range: #e0cfbc; --snow: #fefdfb; --wall: #6b7830; --wood: #b49a7c;
+    --mural: #f8eacf; --glass: #3c4128; --inside: #3c4128; --door-glass: rgba(248, 234, 207, 0.16);
+    --frame: #1c1a14; --bulb: #f8eacf; --ground: #e0cfbc; --chalk: #3c4128; --chalk-ink: #f8eacf;
+  }
+  .shopfront--dusk {
+    --sky: #3c4128; --sun: #f8eacf; --range: #576544; --snow: #e0cfbc; --wall: #576544; --wood: #6b5a45;
+    --mural: #e0cfbc; --glass: #f8eacf; --inside: #f8eacf; --door-glass: rgba(248, 234, 207, 0.1);
+    --frame: #1c1a14; --bulb: #fefdfb; --ground: #3c4128; --chalk: #1c1a14; --chalk-ink: #f8eacf;
+  }
+  .sf-sky { fill: var(--sky); }
+  .sf-sun { fill: var(--sun); stroke: #1c1a14; stroke-width: 1.6; }
+  .sf-range { fill: var(--range); }
+  .sf-snow { fill: var(--snow); stroke: #1c1a14; stroke-width: 1; }
+  .sf-wall { fill: var(--wall); }
+  .sf-wood, .sf-counter { fill: var(--wood); }
+  .sf-mural, .sf-glint { stroke: var(--mural); fill: none; }
+  .sf-glint { opacity: 0.7; }
+  .sf-glass { fill: var(--glass); }
+  .sf-shelf, .sf-pot { fill: var(--wood); }
+  .sf-cup { fill: var(--sky); }
+  .shopfront--dusk .sf-cup { fill: #6b7830; }
+  .sf-frame { fill: var(--frame); stroke: var(--frame); }
+  .sf-frame-stroke { stroke: var(--frame); }
+  .sf-awn-a { fill: #6b7830; }
+  .sf-awn-b { fill: #f8eacf; }
+  .shopfront--dusk .sf-awn-b { fill: #e0cfbc; }
+  .sf-inside { fill: var(--inside); }
+  .sf-lamp { fill: #1c1a14; }
+  .sf-bulb { fill: var(--bulb); }
+  .sf-machine { fill: #e0cfbc; }
+  .sf-door-glass { fill: var(--door-glass); }
+  .sf-sign { fill: #fefdfb; }
+  .sf-sign-text { font: 700 22px var(--font-display); fill: #1c1a14; }
+  .sf-logo-board { fill: #3c4128; }
+  .sf-chalk { fill: var(--chalk); }
+  .sf-chalk-text { font: 300 24px var(--font-sans); fill: var(--chalk-ink); }
+  .sf-leaf { fill: #576544; }
+  .sf-tyre { fill: #1c1a14; }
+  .sf-soil { fill: #3c4128; }
+  .sf-ground { fill: var(--ground); }
+</style>

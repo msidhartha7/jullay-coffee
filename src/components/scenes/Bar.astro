@@ -1,0 +1,178 @@
+---
+import { cafe, rupees } from '../../data/cafe';
+import { mugs, mugSVG } from '../../lib/mugs';
+
+// Mug sits under the left group head. Mug viewBox is 0 -26 140 156; scale 1.1.
+const S = 1.1;
+const mugX = 200 - 62 * S;
+const mugY = 402 - 152 * S;
+const cupsOnTop = [0, 1, 2, 3, 4, 5, 6];
+---
+<div class="panel panel-bar" id="bar" data-zone="caffeine" aria-labelledby="bar-h">
+  <div class="panel-body bar-body">
+    <div class="chalkboard">
+      <p class="t-eyebrow chalk-eyebrow">At the bar</p>
+      <h2 id="bar-h" class="t-display chalk-h">Today's pour.</h2>
+      <ul class="drinks" role="list">
+        {cafe.drinks.map((d) => (
+          <li>
+            <button type="button" class="drink" data-drink={d.id} aria-describedby="ticket">
+              <span class="drink-name">{d.name}</span>
+              <span class="drink-dots" aria-hidden="true"></span>
+              <span class="drink-price">{rupees(d.price)}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p class="chalk-foot t-small">{cafe.houseRules.join(' ')}</p>
+    </div>
+
+    <div class="counter">
+      <svg class="machine" viewBox="0 0 600 450" role="img" aria-label="The espresso machine, with your mug under the group head." overflow="visible">
+        <!-- cups warming on top -->
+        {cupsOnTop.map((i) => (
+          <g transform={`translate(${78 + i * 64} 0)`}>
+            <path d="M0 12 h40 l-4 34 q-1 6 -7 6 h-18 q-6 0 -7 -6 z" fill="#576544" stroke="#1c1a14" stroke-width="1.4" />
+            <path d="M24 12 h16 l-4 34 q-1 6 -7 6 h-5 z" fill="url(#jh)" opacity=".6" />
+            <ellipse cx="20" cy="12" rx="20" ry="4" fill="#3c4128" stroke="#1c1a14" stroke-width="1.2" />
+          </g>
+        ))}
+        <rect x="46" y="52" width="508" height="10" fill="#1c1a14" />
+        <!-- body -->
+        <rect x="40" y="62" width="520" height="182" fill="#2a2820" stroke="#1c1a14" stroke-width="2" />
+        <rect x="40" y="62" width="520" height="182" fill="url(#jh-cream)" opacity=".18" />
+        <rect x="58" y="80" width="484" height="2" fill="#f8eacf" opacity=".5" />
+        <rect x="236" y="120" width="128" height="34" fill="#f8eacf" stroke="#1c1a14" stroke-width="1.4" />
+        <text x="300" y="143" text-anchor="middle" class="machine-plate">ESPRESSO</text>
+        <!-- gauges -->
+        {[120, 480].map((x) => (
+          <g>
+            <circle cx={x} cy="137" r="22" fill="#f8eacf" stroke="#1c1a14" stroke-width="2" />
+            <line x1={x} y1="137" x2={x + 12} y2="126" stroke="#1c1a14" stroke-width="2" />
+            <circle cx={x} cy="137" r="2.5" fill="#1c1a14" />
+          </g>
+        ))}
+        <!-- group heads -->
+        {[200, 400].map((x) => (
+          <g>
+            <rect x={x - 34} y="244" width="68" height="20" fill="#e0cfbc" stroke="#1c1a14" stroke-width="1.6" />
+            <rect x={x - 34} y="244" width="68" height="20" fill="url(#jh-v)" opacity=".7" />
+            <path d={`M${x - 40} 264 h80 l-6 14 h-68 z`} fill="#1c1a14" />
+            <path d={`M${x + 34} 268 L${x + 112} 276`} stroke="#1c1a14" stroke-width="12" stroke-linecap="round" />
+            <path d={`M${x + 70} 272 L${x + 112} 276`} stroke="#b49a7c" stroke-width="8" stroke-linecap="round" />
+            <rect x={x - 12} y="278" width="24" height="10" fill="#1c1a14" />
+          </g>
+        ))}
+        <!-- steam wand -->
+        <path d="M520 244 C522 300 528 330 540 370" fill="none" stroke="#1c1a14" stroke-width="7" stroke-linecap="round" />
+        <path d="M520 244 C522 300 528 330 540 370" fill="none" stroke="#e0cfbc" stroke-width="3" stroke-linecap="round" />
+        <!-- back panel -->
+        <rect x="40" y="244" width="520" height="158" fill="#3c4128" />
+        <rect x="40" y="244" width="520" height="158" fill="url(#jh-dense)" opacity=".5" />
+        <rect x="40" y="244" width="520" height="158" fill="none" stroke="#1c1a14" stroke-width="2" />
+        <!-- redraw heads over back panel -->
+        {[200, 400].map((x) => (
+          <g>
+            <rect x={x - 34} y="244" width="68" height="20" fill="#e0cfbc" stroke="#1c1a14" stroke-width="1.6" />
+            <path d={`M${x - 40} 264 h80 l-6 14 h-68 z`} fill="#1c1a14" />
+            <path d={`M${x + 34} 268 L${x + 112} 276`} stroke="#1c1a14" stroke-width="12" stroke-linecap="round" />
+            <path d={`M${x + 70} 272 L${x + 112} 276`} stroke="#b49a7c" stroke-width="8" stroke-linecap="round" />
+            <rect x={x - 12} y="278" width="24" height="8" fill="#1c1a14" />
+            <path d={`M${x - 8} 286 v6 M${x + 8} 286 v6`} stroke="#1c1a14" stroke-width="3" />
+          </g>
+        ))}
+        <path d="M520 244 C522 300 528 330 540 370" fill="none" stroke="#1c1a14" stroke-width="7" stroke-linecap="round" />
+        <path d="M520 244 C522 300 528 330 540 370" fill="none" stroke="#e0cfbc" stroke-width="3" stroke-linecap="round" />
+
+        <!-- espresso streams -->
+        <g class="streams" data-streams>
+          <line x1="192" y1="292" x2="192" y2="318" stroke="#1c1a14" stroke-width="3" stroke-linecap="round" />
+          <line x1="208" y1="292" x2="208" y2="318" stroke="#1c1a14" stroke-width="3" stroke-linecap="round" />
+        </g>
+
+        <!-- drip tray -->
+        <rect x="56" y="402" width="488" height="16" fill="#e0cfbc" stroke="#1c1a14" stroke-width="1.8" />
+        <rect x="56" y="402" width="488" height="16" fill="url(#jh-v)" opacity=".8" />
+        <rect x="40" y="418" width="520" height="22" fill="#1c1a14" />
+
+        <!-- your mug -->
+        <g data-bar-mug data-x={mugX} data-y={mugY} data-s={S}>
+          <Fragment set:html={mugSVG(mugs[0], { uid: 'bar', steam: true }).replace('<svg ', `<svg x="${mugX}" y="${mugY}" width="${140 * S}" height="${156 * S}" `)} />
+        </g>
+
+        <!-- milk pitcher / kettle -->
+        <g class="pitcher" data-pitcher>
+          <path d="M0 0 h56 l6 66 q0 8 -8 8 h-52 q-8 0 -8 -8 z" fill="#e0cfbc" stroke="#1c1a14" stroke-width="1.8" />
+          <path d="M30 0 h26 l6 66 q0 8 -8 8 h-24 z" fill="url(#jh)" opacity=".6" />
+          <path d="M0 0 l-14 -10 l6 14 z" fill="#e0cfbc" stroke="#1c1a14" stroke-width="1.6" />
+          <path d="M60 14 c22 0 22 40 2 40" fill="none" stroke="#1c1a14" stroke-width="7" />
+        </g>
+        <path class="pour-stream" data-pour-stream d="M262 260 C236 262 214 280 206 318" fill="none" stroke="#fefdfb" stroke-width="5" stroke-linecap="round" />
+        <!-- ice -->
+        <g class="ice" data-ice>
+          {[0, 1, 2].map((i) => (
+            <g transform={`translate(${182 + i * 14} ${200 - i * 10}) rotate(${i * 18 - 12})`}>
+              <rect width="16" height="16" fill="#fefdfb" stroke="#1c1a14" stroke-width="1.2" />
+              <rect width="16" height="16" fill="url(#jh-fine)" opacity=".6" />
+            </g>
+          ))}
+        </g>
+      </svg>
+
+      <div class="ticket" id="ticket" aria-live="polite" data-ticket>
+        <p class="t-eyebrow ticket-eyebrow">Your order</p>
+        <p class="t-title" data-ticket-name>Pick something from the board.</p>
+        <p class="t-small" data-ticket-note>We pour it into your mug.</p>
+        <p class="ticket-row">
+          <span class="t-small" data-ticket-mug>In the camp mug.</span>
+          <span class="t-title" data-ticket-price></span>
+        </p>
+        <p class="ticket-tags" data-ticket-tags></p>
+      </div>
+      <a class="btn btn--accent bar-cta" href={cafe.mapUrl} target="_blank" rel="noopener">Come get the real one</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .bar-body { grid-template-columns: minmax(300px, 0.9fr) 1.2fr; align-items: center; }
+  .chalkboard {
+    background: var(--jullay-forest); color: var(--jullay-cream);
+    border: 12px solid var(--jullay-stone); outline: 1.5px solid var(--jullay-ink); outline-offset: 0;
+    padding: var(--space-3); display: grid; gap: var(--space-2);
+    box-shadow: inset 0 0 0 1.5px var(--jullay-ink);
+  }
+  .chalk-eyebrow, .chalk-foot { color: var(--jullay-cream); }
+  .chalk-h { color: var(--jullay-milk); }
+  .drinks { list-style: none; margin: 0; padding: 0; display: grid; }
+  .drink {
+    width: 100%; display: flex; align-items: baseline; gap: var(--space-1); text-align: left;
+    padding: 7px 0; font: 300 clamp(17px, 2.2svh, 21px) / 1.2 var(--font-sans); letter-spacing: 0.02em; color: var(--jullay-cream);
+  }
+  .drink-dots { flex: 1; border-bottom: 1.5px dotted var(--jullay-cream); opacity: .6; transform: translateY(-4px); }
+  .drink:hover .drink-name, .drink[aria-pressed="true"] .drink-name { font-weight: 600; color: var(--jullay-milk); }
+  .drink[aria-pressed="true"] .drink-name::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 8px; background: var(--jullay-cream); border-radius: var(--radius-pill); }
+  .drink:focus-visible { outline-color: var(--jullay-milk); }
+
+  .counter { display: grid; gap: var(--space-2); justify-items: center; }
+  .machine { width: min(100%, 560px, 62svh); height: auto; display: block; }
+  .machine-plate { font: 600 13px var(--font-sans); letter-spacing: 0.32em; fill: #1c1a14; }
+  .streams, .pitcher, .pour-stream, .ice { opacity: 0; }
+  .streams line { transform-box: fill-box; transform-origin: top; }
+
+  .ticket {
+    width: min(100%, 440px); background: var(--jullay-milk); color: var(--jullay-ink);
+    padding: var(--space-2); display: grid; gap: 4px;
+    border-top: 2px dashed var(--jullay-ink);
+  }
+  .ticket-eyebrow { color: var(--jullay-moss); }
+  .ticket-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); }
+  .ticket-tags { display: flex; gap: 6px; }
+  .ticket-tags:empty { display: none; }
+  .bar-cta { justify-self: center; }
+
+  @media (max-width: 860px) {
+    .chalkboard { padding: var(--space-2); border-width: 8px; }
+    .machine { width: 100%; }
+  }
+</style>

@@ -1,0 +1,24 @@
+---
+const words = ['What', 'if', 'it', 'all', 'works', 'out?'];
+---
+<section class="works" aria-label="What if it all works out?">
+  <p class="t-eyebrow works-eyebrow">On the wall by the bar</p>
+  <p class="works-line" aria-hidden="true">
+    {words.map((w) => <span class="works-word" data-word>{w}</span>)}
+  </p>
+  <p class="sr-only">What if it all works out?</p>
+</section>
+
+<style>
+  .works {
+    background: var(--jullay-milk); color: var(--jullay-ink);
+    padding: var(--space-4) var(--space-3); min-height: 100svh; display: grid; align-content: center; gap: var(--space-3);
+    border-top: 1.5px solid var(--jullay-ink);
+  }
+  .works-eyebrow { color: var(--jullay-moss); text-align: center; }
+  .works-line {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0 0.22em; max-width: 12ch; margin: 0 auto; text-align: center;
+    font: 800 clamp(64px, 13vw, 200px) / 0.86 var(--font-display); letter-spacing: -0.04em; text-transform: uppercase;
+  }
+  .works-word { display: inline-block; }
+</style>

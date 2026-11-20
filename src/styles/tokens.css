@@ -1,0 +1,71 @@
+/* Jullay Coffee — tokens, transcribed from the Jullay Coffee design system (tokens.json). */
+:root {
+  /* Palette */
+  --jullay-olive: #6b7830;
+  --jullay-moss: #576544;
+  --jullay-forest: #3c4128;
+  --jullay-cream: #f8eacf;
+  --jullay-milk: #fefdfb;
+  --jullay-oat: #e0cfbc;
+  --jullay-chili: #c23129;
+  --jullay-ink: #1c1a14;
+  --jullay-stone: #b49a7c; /* illustration and photography only */
+
+  /* Semantic: Cream theme (default) */
+  --surface: var(--jullay-cream);
+  --surface-raised: var(--jullay-milk);
+  --surface-alt: var(--jullay-oat);
+  --surface-inverse: var(--jullay-forest);
+  --text: var(--jullay-ink);
+  --text-muted: var(--jullay-moss);
+  --text-inverse: var(--jullay-cream);
+  --brand: var(--jullay-olive);
+  --on-brand: var(--jullay-milk);
+  --accent: var(--jullay-chili);
+  --on-accent: var(--jullay-milk);
+  --border: var(--jullay-oat);
+  --border-strong: var(--jullay-moss);
+  --focus: var(--jullay-chili);
+
+  /* Type */
+  --font-display: Outfit, "Avenir Next", system-ui, sans-serif;
+  --font-sans: Outfit, "Avenir Next", system-ui, sans-serif;
+
+  /* Spacing (8px rhythm) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 32px;
+  --space-4: 64px;
+
+  /* Radius */
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-pill: 999px;
+}
+
+/* Forest theme: cup-green page, cream buttons */
+[data-theme="forest"] {
+  --surface: var(--jullay-forest);
+  --surface-raised: var(--jullay-moss);
+  --surface-alt: var(--jullay-moss);
+  --surface-inverse: var(--jullay-cream);
+  --text: var(--jullay-milk);
+  --text-muted: var(--jullay-cream);
+  --text-inverse: var(--jullay-forest);
+  --brand: var(--jullay-cream);
+  --on-brand: var(--jullay-forest);
+  --border: var(--jullay-moss);
+  --border-strong: var(--jullay-cream);
+  --focus: var(--jullay-milk);
+}
+
+/* Type styles */
+.t-display-xl { font: 800 clamp(56px, 11vw, 72px) / 0.92 var(--font-display); letter-spacing: -0.02em; }
+.t-display { font: 800 clamp(36px, 7vw, 48px) / 1 var(--font-display); letter-spacing: -0.015em; }
+.t-headline { font: 700 32px / 36px var(--font-display); }
+.t-title { font: 600 22px / 28px var(--font-display); }
+.t-tagline { font: 300 24px / 32px var(--font-sans); letter-spacing: 0.02em; }
+.t-body { font: 400 16px / 24px var(--font-sans); }
+.t-small { font: 400 14px / 20px var(--font-sans); }
+.t-overline { font: 300 14px / 20px var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; }
+.t-eyebrow { font: 600 12px / 16px var(--font-sans); letter-spacing: 0.32em; text-transform: uppercase; }

@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { cafe, rupees } from '../data/cafe';
+---
+<Base title={`Menu. ${cafe.name}`} description="Coffee, food and hours at Jullay Coffee. No hype. Just coffee.">
+  <header class="m-head">
+    <a href="/" class="m-logo" aria-label="Jullay Coffee, home"><span class="logo" aria-hidden="true"></span></a>
+    <a href="/" class="m-back">Walk in instead</a>
+  </header>
+  <main class="m-main">
+    <h1 class="t-display">The menu.</h1>
+    <p class="t-tagline m-tag">{cafe.tagline}</p>
+
+    <section aria-labelledby="m-coffee">
+      <h2 id="m-coffee" class="t-eyebrow">Caffeine</h2>
+      <ul role="list">
+        {cafe.drinks.map((d) => (
+          <li>
+            <div class="m-row"><span class="t-title">{d.name}</span><span class="t-title">{rupees(d.price)}</span></div>
+            <p class="t-small m-note">{d.note} {d.tags?.map((t) => <span class="tag">{t}</span>)}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="m-food">
+      <h2 id="m-food" class="t-eyebrow">Carbs</h2>
+      <ul role="list">
+        {cafe.food.map((f) => (
+          <li>
+            <div class="m-row"><span class="t-title">{f.name}</span><span class="t-title">{rupees(f.price)}</span></div>
+            <p class="t-small m-note">{f.note}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="m-visit" class="m-visit">
+      <h2 id="m-visit" class="t-eyebrow">Visit</h2>
+      <div>
+        <address class="t-body">{cafe.address.map((l) => <span>{l}<br /></span>)}</address>
+        <ul role="list" class="t-body">{cafe.hours.map((h) => <li>{h.days}: {h.open} to {h.close}</li>)}</ul>
+        <p class="t-body"><a href={cafe.instagram.url}>{cafe.instagram.handle}</a></p>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .m-head { display: flex; justify-content: space-between; align-items: center; padding: var(--space-2) var(--space-3); background: var(--brand); color: var(--on-brand); }
+  .m-logo { width: 96px; color: var(--jullay-milk); }
+  .m-back { color: var(--jullay-milk); font-weight: 600; }
+  .m-head :focus-visible { outline-color: var(--jullay-milk); }
+  .m-main { max-width: 680px; margin: 0 auto; padding: var(--space-4) var(--space-3); display: grid; gap: var(--space-4); }
+  .m-tag { color: var(--text-muted); margin-top: calc(-1 * var(--space-3)); }
+  section { display: grid; gap: var(--space-2); }
+  section h2 { color: var(--text-muted); border-bottom: 2px solid var(--text); padding-bottom: var(--space-1); }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  .m-row { display: flex; justify-content: space-between; gap: var(--space-2); }
+  .m-note { color: var(--text-muted); display: flex; gap: var(--space-1); align-items: center; flex-wrap: wrap; }
+  address { font-style: normal; margin-bottom: var(--space-2); }
+  .m-visit ul { gap: 0; margin-bottom: var(--space-2); }
+  @media print { .m-head { background: none; color: var(--jullay-ink); } .m-logo, .m-back { color: var(--jullay-ink); } }
+</style>

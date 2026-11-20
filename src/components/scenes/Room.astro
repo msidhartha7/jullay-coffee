@@ -1,0 +1,80 @@
+---
+import MugWall from './MugWall.astro';
+import Bar from './Bar.astro';
+import Carbs from './Carbs.astro';
+import Chapters from './Chapters.astro';
+---
+<section id="room" class="room" aria-label="Inside the cafe" tabindex="-1">
+  <div class="room-track" data-track>
+    <MugWall />
+    <Bar />
+    <Carbs />
+    <Chapters />
+  </div>
+  <div class="room-light" aria-hidden="true" data-light>
+    <span></span><span></span><span></span>
+  </div>
+</section>
+
+<style>
+  .room {
+    position: relative; color: var(--jullay-milk); overflow: hidden;
+    background-color: var(--jullay-olive);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 6 L6 0' stroke='%231c1a14' stroke-width='.35' opacity='.25'/%3E%3C/svg%3E");
+  }
+  .room:focus { outline: none; }
+  .room-track { position: relative; z-index: 1; display: flex; flex-direction: column; }
+
+  :global(.panel) {
+    position: relative; min-height: 100svh; padding: 96px var(--space-3) var(--space-4);
+    display: grid; grid-template-rows: auto 1fr; gap: var(--space-2);
+  }
+  :global(.panel-body) { display: grid; gap: var(--space-4); align-items: center; max-width: 1280px; width: 100%; margin: 0 auto; }
+  :global(.panel-copy) { display: grid; gap: var(--space-2); align-content: center; }
+  :global(.panel-copy .t-eyebrow) { color: var(--jullay-cream); }
+  :global(.panel-copy .btn) { justify-self: start; }
+  :global(.panel .btn:not(.btn--accent)) { background: var(--jullay-cream); color: var(--jullay-forest); }
+
+  /* the plank signs, as in the cafe */
+  :global(.plank) {
+    justify-self: center; display: grid; place-items: center; padding: 10px 48px;
+    background-color: var(--jullay-stone); outline: 1.5px solid var(--jullay-ink);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='12'%3E%3Cpath d='M0 3 C30 1 60 5 90 3 S140 1 160 3' fill='none' stroke='%231c1a14' stroke-width='.7' opacity='.55'/%3E%3Cpath d='M0 9 C40 10 70 7 110 9 S150 10 160 9' fill='none' stroke='%231c1a14' stroke-width='.5' opacity='.45'/%3E%3C/svg%3E");
+  }
+  :global(.plank span) {
+    background: var(--jullay-ink); color: var(--jullay-milk); padding: 8px 18px;
+    font: 700 18px / 1 var(--font-display); letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  :global(.panel-bar) { grid-template-rows: 1fr; }
+
+  /* window light: flat bands of sun that move with the hour */
+  .room-light {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    --lean: -18deg; --shift: 0vw; --sun: .1;
+  }
+  .room-light span {
+    position: absolute; top: -10%; bottom: -10%; width: 9vw; background: var(--jullay-milk); opacity: var(--sun);
+    transform: translateX(var(--shift)) skewX(var(--lean));
+  }
+  .room-light span:nth-child(1) { left: 10%; width: 14vw; }
+  .room-light span:nth-child(2) { left: 27%; width: 4vw; }
+  .room-light span:nth-child(3) { left: 34%; width: 16vw; }
+    :global(.room[data-night="true"]) .room-light span { display: none; }
+  :global(.room[data-night="true"]) { background-color: var(--jullay-moss); }
+
+  /* desktop: a horizontal room */
+  @media (min-width: 861px) {
+    :global(html.js) .room { height: 100svh; }
+    :global(html.js) .room-track { flex-direction: row; height: 100%; width: max-content; will-change: transform; }
+    :global(html.js) .room-track > :global(.panel) { width: 100vw; height: 100svh; min-height: 0; flex: none; }
+  }
+  @media (max-width: 860px) {
+    :global(.panel) { padding: 84px var(--space-2) var(--space-4); }
+    :global(.panel-body) { grid-template-columns: 1fr !important; gap: var(--space-3); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .room { height: auto; }
+    :global(html.js) .room-track { flex-direction: column; width: auto; }
+    :global(html.js) .room-track > :global(.panel) { width: auto; height: auto; min-height: 100svh; }
+  }
+</style>
