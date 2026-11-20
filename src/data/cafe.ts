@@ -149,7 +149,7 @@ export const cafe = {
   address: ['Jullay Coffee', '1062, 22nd B Main Rd, Parangi Palaya', 'Sector 2, HSR Layout', 'Bengaluru, Karnataka 560102'],
   addressNote: 'In Independence Park.',
   mapUrl: 'https://maps.google.com/?cid=15052274554513737358',
-  instagram: { handle: '@jullay.coffee', url: 'https://instagram.com/jullay.coffee' },
+  instagram: { handle: '@jullaycoffee', url: 'https://instagram.com/jullaycoffee' },
 
   // From "A few things to know". 24h clock, in the cafe's time zone.
   timeZone: 'Asia/Kolkata',
