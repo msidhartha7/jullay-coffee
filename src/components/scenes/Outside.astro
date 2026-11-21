@@ -28,8 +28,12 @@ import { cafe } from '../../data/cafe';
   .outside-overline {
     position: absolute; top: 84px; left: 0; right: 0; text-align: center; color: var(--jullay-ink);
   }
+  /* the tap target matches the drawn doorway (468 x 444 at (800, 655) in the 1600x1000 slice-fit SVG),
+     so a tap anywhere on the glass doors walks in, on any screen shape */
   .walk-in {
-    position: absolute; left: 50%; top: 65.5%; width: min(30vw, 46svh); height: 46svh;
+    --s: max(100vw / 1600, 100svh / 1000);
+    position: absolute; left: 50%; top: calc(50% + var(--s) * 155);
+    width: min(100%, calc(var(--s) * 468)); height: calc(var(--s) * 444);
     transform: translate(-50%, -50%); cursor: pointer;
   }
   .walk-in:focus-visible { outline: 2px solid var(--jullay-milk); outline-offset: 4px; }
@@ -40,6 +44,10 @@ import { cafe } from '../../data/cafe';
   /* faded out once you start walking in: stop animating it */
   .outside-stage:global(.is-walking) .scroll-hint { animation-play-state: paused; }
   @keyframes nudge { 50% { transform: translateY(5px); } }
+  /* phones: the hatch textures are what make the zoom too heavy to redraw; drop them while walking in */
+  @media (max-width: 860px) {
+    .outside-stage:global(.is-walking) :global(#shopfront [fill^="url(#jh"]) { display: none; }
+  }
 
   .hello {
     display: grid; place-content: center; gap: var(--space-2); text-align: center;

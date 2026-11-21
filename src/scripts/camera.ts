@@ -46,19 +46,19 @@ export function initCamera() {
       .to(cam, { scale: 1.6, duration: 0.35, ease: 'power1.in' }, 0)
       .to(doors.l, { x: -240, duration: 0.25, ease: 'power2.inOut' }, 0.22)
       .to(doors.r, { x: 240, duration: 0.25, ease: 'power2.inOut' }, 0.22)
-      .to(cam, { scale: desktop ? 5.2 : 6.5, duration: 0.4, ease: 'power2.in' }, 0.35)
+      .to(cam, { scale: desktop ? 5.2 : 3, duration: 0.4, ease: 'power2.in' }, 0.35)
       .set(document.querySelector('[data-walk-in]'), { pointerEvents: 'none' }, 0.12)
       .to(hello, { opacity: 1, duration: 0.14 }, 0.66)
       .set(hello, { pointerEvents: 'auto' }, 0.7)
       .from(hello.children, { y: 30, opacity: 0, stagger: 0.04, duration: 0.14 }, 0.68)
-      .to({}, { duration: 0.18 });
+      .to({}, { duration: desktop ? 0.18 : 0.6 }); // mobile: hold Jullay longer so a flick doesn't skip it
 
     // hello now covers the shopfront: stop compositing the fully zoomed SVG under it
     tl.call(() => { cam.style.visibility = 'hidden'; stage.classList.add('is-through'); }, undefined, 0.82)
       .call(() => { cam.style.visibility = ''; stage.classList.remove('is-through'); }, undefined, 0.81);
 
     outsideST = ScrollTrigger.create({
-      trigger: stage, start: 'top top', end: () => `+=${window.innerHeight * 2.2}`,
+      trigger: stage, start: 'top top', end: () => `+=${window.innerHeight * (desktop ? 2.2 : 3.2)}`,
       pin: true, scrub: 0.25, animation: tl, invalidateOnRefresh: true,
       onRefresh: () => { cam.style.transformOrigin = doorOrigin(stage); },
       // keep the zoom on the GPU only while it's actually zooming
